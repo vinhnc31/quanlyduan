@@ -1,12 +1,28 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import { StyleSheet, Text, View,Image } from 'react-native';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createStackNavigator } from '@react-navigation/stack';
 
-export default function App() {
+
+const Tab = createBottomTabNavigator();
+const Stack = createStackNavigator();
+
+import dangnhap from './Scress/Dangnhap';
+import dangky from './Scress/Dangky';
+import home from './Scress/Home';
+
+
+
+const App = () =>{
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <NavigationContainer>
+   <Stack.Navigator initialRouteName='dangnhap'>
+     <Stack.Screen name='Dangnhap' component={dangnhap}/>
+     <Stack.Screen name='dangky' component={dangky}/>
+     <Stack.Screen name='Home' component={home}/>
+   </Stack.Navigator>
+   </NavigationContainer>
   );
 }
 
@@ -18,3 +34,4 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 });
+export default App;
