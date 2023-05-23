@@ -17,7 +17,7 @@ import home from './Scress/Home';
 const App = () =>{
   return (
     <NavigationContainer>
-   <Stack.Navigator initialRouteName='Home'>
+   <Stack.Navigator initialRouteName='Dangnhap'>
      <Stack.Screen name='Dangnhap' component={dangnhap}/>
      <Stack.Screen name='dangky' component={dangky}/>
      <Stack.Screen name='Home' component={home}/>

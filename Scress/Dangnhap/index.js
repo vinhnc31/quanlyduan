@@ -38,7 +38,7 @@ const dangnhap = (props) => {
     return (
         <View style={styles.container}>
 
-        
+        <Text> hoof triinh</Text>
             <TextInput
                 placeholder="Email"
                 onChangeText={setEmail}
