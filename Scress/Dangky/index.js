@@ -26,7 +26,7 @@ const dangky = (props) => {
           }
       }).then(reponse => {
           if (!reponse.ok) {
-              setError("Tài khoản không chính xác !")
+              setError("Tài khoản không chính xác lắm !")
           } else {
               navigation.navigate("Dangnhap")
           }
