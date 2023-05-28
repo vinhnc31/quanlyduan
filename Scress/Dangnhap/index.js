@@ -20,25 +20,27 @@ const dangnhap = (props) => {
   const [password, setPassword] = useState("");
 
   const onLogin = () => {
-    const data = {
-      email,
-      password,
-    };
-    fetch(API_USE + "/dangnhap", {
-      method: "POST",
-      body: JSON.stringify(data),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
-      .then((reponse) => {
-        if (!reponse.ok) {
-          setError("Tài khoản không chính xác !");
-        } else {
-          navigation.navigate("Home");
-        }
-      })
-      .catch((err) => console.log(err));
+    // const data = {
+    //   email,
+    //   password,
+    // };
+    // fetch(API_USE + "/dangnhap", {
+    //   method: "POST",
+    //   body: JSON.stringify(data),
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //   },
+    // })
+    //   .then((reponse) => {
+    //     if (!reponse.ok) {
+    //       setError("Tài khoản không chính xác !");
+    //     } else {
+    //       navigation.navigate("Home");
+    //     }
+    //   })
+    //   .catch((err) => console.log(err));
+
+    navigation.navigate("Home")
   };
   return (
     <View style={styles.container}>

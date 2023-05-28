@@ -10,7 +10,7 @@ import dangnhap from "./Scress/Dangnhap";
 import dangky from "./Scress/Dangky";
 import SplashScreen from "./Scress/Splash";
 import TabNaviagation from "./Scress/Tabnavigation";
-
+import doimk from "./Scress/doimatkhau";
 const App = () => {
   return (
     <NavigationContainer>
@@ -33,6 +33,11 @@ const App = () => {
         <Stack.Screen
           name="Home"
           component={TabNaviagation}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="doimk"
+          component={doimk}
           options={{ headerShown: false }}
         />
       </Stack.Navigator>

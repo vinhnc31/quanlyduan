@@ -1,15 +1,16 @@
 import { Text, View, Pressable, TextInput, StyleSheet } from "react-native";
 import React, { useState } from "react";
-import Dropzone from "react-dropzone";
 import { API_USE } from "../../helper/Api";
 const dangky = (props) => {
   const navigation = props.navigation;
   const chuyenMh = (props) => {
     navigation.navigate(props);
   };
-  const [name, setname] = useState("");
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [checkValidateName, setCheckValidateName] = useState(true);
+  const [checkValidateEmail, setCheckValidateEmail] = useState(false);
 
   const onLogout = () => {
     const data = {
@@ -33,21 +34,35 @@ const dangky = (props) => {
       })
       .catch((err) => console.log(err));
   };
+
+  const handlerCheckEmail = (text) => {
+    const reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+    setEmail(text);
+    reg.test(text) ? setCheckValidateEmail(false) : setCheckValidateEmail(true);
+  };
   return (
     <View style={styles.container}>
       <Text style={styles.text}>ĐĂNG KÝ</Text>
       <TextInput
         placeholder="Name"
-        onChangeText={setname}
+        onChangeText={setName}
         value={name}
         style={styles.input}
       />
+
       <TextInput
         placeholder="Email"
-        onChangeText={setEmail}
         value={email}
         style={styles.input}
+        onChangeText={(text) => {
+          handlerCheckEmail(text);
+        }}
       />
+      {checkValidateEmail ? (
+        <Text style={styles.checkText}>Email sai định dạng</Text>
+      ) : (
+        <Text></Text>
+      )}
       <TextInput
         placeholder="Password"
         onChangeText={setPassword}
@@ -67,11 +82,11 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: "center",
-    alignItems: "center",
+    // alignItems: "center",
     backgroundColor: "#62CDFF",
   },
   input: {
-    width: 364,
+    width: '100%',
     borderWidth: 1,
     borderColor: "#ccc",
     padding: 10,
@@ -84,6 +99,8 @@ const styles = StyleSheet.create({
     fontSize: 32,
     marginBottom: 87,
     marginTop: -80,
+    textAlign: 'center',
+    fontWeight: 'bold'
   },
   button: {
     width: 150,
@@ -100,6 +117,10 @@ const styles = StyleSheet.create({
     padding: 10,
     color: "#000000",
     fontSize: 20,
+  },
+  checkText: {
+    fontSize: 16,
+    color: "red",
   },
 });
 
