@@ -1,48 +1,53 @@
-import React from 'react';
-import { ScrollView, FlatList, View, Text,Image,StyleSheet,TextInput } from 'react-native';
-import { useEffect, useState } from 'react';
-import { API_PRODUCT } from '../../helper/Api';
+import React from "react";
+import {
+  ScrollView,
+  FlatList,
+  View,
+  Text,
+  Image,
+  StyleSheet,
+  TextInput,
+} from "react-native";
+import { useEffect, useState } from "react";
+import { API_PRODUCT } from "../../helper/Api";
 
 const home = (props) => {
-    const navigation = props.navigation;
-    const [data, setData] = useState([]);
-    const [searchText, setSearchText] = useState('');
-    const [filteredData, setFilteredData] = useState(data);
-    const chuyenMh = (props) => {
-        navigation.navigate(props);
-    }
- 
-    const getProduct = () => {
-        fetch(API_PRODUCT + "/getAllsp")
-            .then(item => item.json())
-            .then(data => setData(data))
-            .catch(err => console.log(err))
-    }
+  const navigation = props.navigation;
+  const [data, setData] = useState([]);
+  const [searchText, setSearchText] = useState("");
+  const [filteredData, setFilteredData] = useState(data);
+  const chuyenMh = (props) => {
+    navigation.navigate(props);
+  };
 
-    useEffect(() => {
-        getProduct()
-      //  getProduct()
-    }, [])
+  const getProduct = () => {
+    fetch(API_PRODUCT + "/getAllsp")
+      .then((item) => item.json())
+      .then((data) => setData(data))
+      .catch((err) => console.log(err));
+  };
 
-    // useEffect(() => {
-    //   // Lọc dữ liệu theo từ khóa tìm kiếm
-    //   const newData = data.filter(item => {
-    //     const itemName = item.name.toLowerCase();
-    //     const searchValue = searchText.toLowerCase();
-    //     return itemName.indexOf(searchValue) > -1;
-    //   });
-    //   setFilteredData(newData);
-    // }, [searchText]);
+  useEffect(() => {
+    getProduct();
+    //  getProduct()
+  }, []);
 
+  // useEffect(() => {
+  //   // Lọc dữ liệu theo từ khóa tìm kiếm
+  //   const newData = data.filter(item => {
+  //     const itemName = item.name.toLowerCase();
+  //     const searchValue = searchText.toLowerCase();
+  //     return itemName.indexOf(searchValue) > -1;
+  //   });
+  //   setFilteredData(newData);
+  // }, [searchText]);
 
-  
-
-    const renderItem = ({ item }) => (
-      <View style={styles.itemContainer}>
+  const renderItem = ({ item }) => (
+    <View style={styles.itemContainer}>
       <Image source={{ uri: item.imgsp }} style={styles.itemImage} />
       <Text style={styles.itemName}>{item.tensp}</Text>
     </View>
-    );
+  );
 
   return (
     <ScrollView>
@@ -51,35 +56,30 @@ const home = (props) => {
           style={styles.searchInput}
           placeholder="Tìm kiếm"
           value={searchText}
-         onChangeText={text => setSearchText(text)}
+          onChangeText={(text) => setSearchText(text)}
         />
-        
       </View>
-    <Text style={{ fontSize: 20, fontWeight: 'bold', marginVertical: 10 }}>
-      Horizontal FlatList
-    </Text>
-    <FlatList
-      horizontal
-      data={data}
-      renderItem={renderItem}
-      keyExtractor={(item) => item.id}
-    />
-    <Text style={{ fontSize: 20, fontWeight: 'bold', marginVertical: 10 }}>
-      Vertical FlatList
-    </Text>
-    <FlatList
-      data={data}
-      renderItem={renderItem}
-      keyExtractor={(item) => item.id}
-    />
-  </ScrollView>
+      <Text style={styles.text}>Thể Loại</Text>
+      <FlatList
+        horizontal
+        data={data}
+        renderItem={renderItem}
+        keyExtractor={(item) => item.id}
+      />
+      <Text style={styles.text}>Top sách xem nhiều nhất</Text>
+      <FlatList
+        data={data}
+        renderItem={renderItem}
+        keyExtractor={(item) => item.id}
+      />
+    </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
   itemContainer: {
-    flexDirection: 'column',
-    alignItems: 'center',
+    flexDirection: "column",
+    alignItems: "center",
     margin: 8,
   },
   itemImage: {
@@ -90,26 +90,30 @@ const styles = StyleSheet.create({
   itemName: {
     fontSize: 16,
     marginTop: 8,
-    textAlign: 'center',
+    textAlign: "center",
   },
   searchContainer: {
     marginTop: 10,
     marginBottom: 10,
     borderBottomWidth: 1,
-    borderBottomColor: '#ccc',
-   
+    borderBottomColor: "#ccc",
   },
   searchInput: {
     height: 40,
-    borderWidth: 3,
-    borderColor: '#ccc',
-    borderRadius: 20,
+    borderWidth: 2,
+    borderColor: "#ccc",
+    borderRadius: 10,
     paddingHorizontal: 16,
     marginBottom: 10,
     fontSize: 16,
-    color: '#333',
-    backgroundColor: '#f9f9f9',
-
+    color: "#333",
+    backgroundColor: "#f9f9f9",
+    marginTop: 15,
+  },
+  text: {
+    fontSize: 20,
+    fontWeight: "bold",
+    marginVertical: 10,
   },
 });
 export default home;
