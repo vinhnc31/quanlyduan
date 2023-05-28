@@ -10,6 +10,8 @@ import dangnhap from "./Scress/Dangnhap";
 import dangky from "./Scress/Dangky";
 import SplashScreen from "./Scress/Splash";
 import TabNaviagation from "./Scress/Tabnavigation";
+import home from "./Scress/Home";
+import chitiet from "./Scress/Home/chitiet";
 
 const App = () => {
   return (
@@ -25,6 +27,16 @@ const App = () => {
           component={dangnhap}
           options={{ headerShown: false }}
         />
+          <Stack.Screen
+          name="home"
+          component={home}
+          options={{ headerShown: false }}
+        />
+         <Stack.Screen
+          name="chitiet"
+          component={chitiet}
+          options={{ headerShown: false }}
+        /> 
         <Stack.Screen
           name="dangky"
           component={dangky}
@@ -36,6 +48,7 @@ const App = () => {
           options={{ headerShown: false }}
         />
       </Stack.Navigator>
+
     </NavigationContainer>
   );
 };

@@ -13,26 +13,23 @@ const dangky = (props) => {
 
   const onLogout = () => {
     const data = {
-      name,
-      email,
-      password,
-    };
-    fetch(API_USE + "/dangky", {
-      method: "POST",
-      body: JSON.stringify(data),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
-      .then((reponse) => {
-        if (!reponse.ok) {
-          setError("Tài khoản không chính xác !");
-        } else {
-          navigation.navigate("Dangnhap");
+       name, email, password
+    }
+    fetch(API_USE + "/addUser", {
+        method: "POST",
+        body: JSON.stringify(data),
+        headers: {
+            "Content-Type": "application/json"
         }
-      })
-      .catch((err) => console.log(err));
-  };
+    }).then(reponse => {
+        if (!reponse.ok) {
+            setError("Tài khoản không chính xác !")
+        } else {
+            navigation.navigate("Dangnhap")
+        }
+    }).catch(err => console.log(err))
+
+}
   return (
     <View style={styles.container}>
       <Text style={styles.text}>ĐĂNG KÝ</Text>
