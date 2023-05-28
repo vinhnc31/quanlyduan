@@ -55,8 +55,8 @@ const home = (props) => {
         />
         
       </View>
-    <Text style={{ fontSize: 20, fontWeight: 'bold', marginVertical: 10 }}>
-      Horizontal FlatList
+    <Text style={styles.text}>
+      Thể Loại 
     </Text>
     <FlatList
       horizontal
@@ -64,8 +64,8 @@ const home = (props) => {
       renderItem={renderItem}
       keyExtractor={(item) => item.id}
     />
-    <Text style={{ fontSize: 20, fontWeight: 'bold', marginVertical: 10 }}>
-      Vertical FlatList
+    <Text style={styles.text}>
+      Top sách xem nhiều nhất 
     </Text>
     <FlatList
       data={data}
@@ -111,5 +111,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#f9f9f9',
 
   },
+  text : {
+    fontSize: 20, fontWeight: 'bold', marginVertical: 10 
+  }
 });
 export default home;
