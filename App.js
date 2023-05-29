@@ -10,6 +10,7 @@ import dangnhap from "./Scress/Dangnhap";
 import dangky from "./Scress/Dangky";
 import SplashScreen from "./Scress/Splash";
 import TabNaviagation from "./Scress/Tabnavigation";
+import Favourite from "./Scress/Favourite";
 
 const App = () => {
   return (
@@ -33,6 +34,11 @@ const App = () => {
         <Stack.Screen
           name="Home"
           component={TabNaviagation}
+          options={{ headerShown: false }}
+        />
+         <Stack.Screen
+          name="Favourite"
+          component={Favourite}
           options={{ headerShown: false }}
         />
       </Stack.Navigator>
