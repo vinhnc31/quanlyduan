@@ -16,7 +16,7 @@ const App = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator initialRouteName="SplashScreen">
-        <Stack.Screen
+        {/* <Stack.Screen
           name="SplashScreen"
           component={SplashScreen}
           options={{ headerShown: false }}
@@ -35,7 +35,7 @@ const App = () => {
           name="Home"
           component={TabNaviagation}
           options={{ headerShown: false }}
-        />
+        /> */}
          <Stack.Screen
           name="Favourite"
           component={Favourite}
