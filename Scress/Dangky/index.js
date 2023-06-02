@@ -9,10 +9,12 @@ const dangky = (props) => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [repassword, setRepassword] = useState("");
+  const [checkValidatePwd, setCheckValidatePwd] = useState(false);
   const [checkValidateName, setCheckValidateName] = useState(true);
   const [checkValidateEmail, setCheckValidateEmail] = useState(false);
 
-  const onLogout = () => {
+  const onRegister = () => {
     const data = {
       name,
       email,
@@ -35,21 +37,40 @@ const dangky = (props) => {
       .catch((err) => console.log(err));
   };
 
+  const handlerCheckName = (text) => {
+    const name = text == '';
+    setName(text);
+    name ? setCheckValidateName(false) : setCheckValidateName(true);
+  };
+
   const handlerCheckEmail = (text) => {
     const reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
     setEmail(text);
     reg.test(text) ? setCheckValidateEmail(false) : setCheckValidateEmail(true);
   };
+
+  const handlerCheckPwd = (text) => {
+    const pwd = text === password;
+    setRepassword(text);
+    pwd ? setCheckValidatePwd(false) : setCheckValidatePwd(true);
+  };
+
   return (
     <View style={styles.container}>
       <Text style={styles.text}>ĐĂNG KÝ</Text>
       <TextInput
         placeholder="Name"
-        onChangeText={setName}
+        onChangeText={(text) => {
+          handlerCheckName(text);
+        }}
         value={name}
         style={styles.input}
       />
-
+      {checkValidateName ? (
+        <Text style={styles.checkText}>Tên không được để trống !</Text>
+      ) : (
+        <Text></Text>
+      )}
       <TextInput
         placeholder="Email"
         value={email}
@@ -70,8 +91,22 @@ const dangky = (props) => {
         secureTextEntry={true}
         style={styles.input}
       />
-
-      <Pressable style={styles.button} onPress={() => onLogout()}>
+      <Text></Text>
+      <TextInput
+        placeholder="Comfirm Password"
+        onChangeText={(text) => {
+          handlerCheckPwd(text);
+        }}
+        value={repassword}
+        secureTextEntry={true}
+        style={styles.input}
+      />
+      {checkValidatePwd ? (
+        <Text style={styles.checkText}>Password phải trùng với Comfirm Password</Text>
+      ) : (
+        <Text></Text>
+      )}
+      <Pressable style={styles.button} onPress={() => onRegister()}>
         <Text style={styles.textButton}>ĐĂNG KÝ</Text>
       </Pressable>
     </View>
@@ -86,7 +121,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#62CDFF",
   },
   input: {
-    width: '100%',
+    width: '90%',
     borderWidth: 1,
     borderColor: "#ccc",
     padding: 10,
@@ -94,6 +129,7 @@ const styles = StyleSheet.create({
     height: 53,
     borderRadius: 10,
     backgroundColor: "#fff",
+    alignSelf: "center",
   },
   text: {
     fontSize: 32,
@@ -119,6 +155,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
   },
   checkText: {
+    marginLeft: 20,
     fontSize: 16,
     color: "red",
   },
