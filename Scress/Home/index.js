@@ -13,7 +13,8 @@ const home = (props) => {
   const [filteredData, setFilteredData] = useState(data);
   const navigation = props.navigation;
   const chuyenMh = (item) => {
-    navigation.navigate(chitiet,{data:item});
+    navigation.navigate(chitiet,{item});
+    
   }
 
   const getProducttl = () => {
@@ -27,14 +28,16 @@ const home = (props) => {
 
   const getProduct = () => {
     fetch(API_PRODUCT + "/getAllsp")
-      .then(item => item.json())
-      .then(data1 => setData1(data1))
+      .then(item => item.json() ,  )
+   
+      .then(data1 => setData1(data1) )
       .catch(err => console.log(err))
   }
 
-  useEffect(() => {
+  useEffect((item) => {
     getProducttl()
     getProduct()
+  
   }, [])
 
 
@@ -80,13 +83,13 @@ const home = (props) => {
           numColumns={2}
           renderItem={({ item }) => {
             return (
-              <TouchableOpacity onPress={() => chuyenMh(item)}>
+              <TouchableOpacity onPress={() =>{navigation.navigate('chitiet',{ item_sp:item});}}>
               <View style={styles.itemContainer2}>
               
-                {/* ahhahahahahah */}
-              <Image source={{ uri: 'http:192.168.0.104:4444/' + item.image }} style={styles.itemImage2}  />
+                {/* ahhahahahahahkkkkkkkkkkkkkkkkkkkkkkkkkkkkk */}
+              <Image source={{ uri: 'http:192.168.0.102:4444/' + item.image }} style={styles.itemImage2}  />
                 <Text style={styles.itemName2}>{item.Tenuser}</Text>
-          
+                
               </View>
               </TouchableOpacity>
             );
@@ -103,10 +106,12 @@ const home = (props) => {
           numColumns={2}
           renderItem={({ item }) => {
             return (
+              <TouchableOpacity onPress={() =>{navigation.navigate('chitiet',{ item_sp:item});}}>
               <View style={styles.itemContainer2}>
-                <Image source={{ uri: 'http:192.168.1.182:4444/' + item.image }} style={styles.itemImage2} />
+                <Image source={{ uri: 'http:192.168.0.102:4444/' + item.image }} style={styles.itemImage2} />
                 <Text style={styles.itemName2}>{item.Tenuser}</Text>
               </View>
+              </TouchableOpacity>
 
             );
           }}

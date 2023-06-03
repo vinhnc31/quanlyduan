@@ -1,24 +1,33 @@
 
-import { StyleSheet, Text, View, Image, Button, TouchableHighlight, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, Image, Button, TouchableHighlight, TouchableOpacity, ScrollView } from 'react-native';
 import { useRoute } from '@react-navigation/native';
 import React from 'react'
+import { useState } from 'react';
 
 
  
 
-const chitiet = (props) => {
- 
+const chitiet = ({route,navigation}) => {
+
+  const { item_sp } = route.params;
+
+  const click =()=>{
+      console.log(item_sp);
+  }
+
+
   return (
     <View style={styles.container}>
-      <Image style={{ width: 230, height: 230, margin: 20, marginLeft: 70 }} source={require('../image/img1.png')} />
+      {/* <Image style={{ width: 230, height: 230, margin: 20, marginLeft: 70 }} source={require('../image/img1.png')} /> */}
+      <Image style={{ width: 230, height: 230, margin: 20, marginLeft: 70 }} source={{ uri: 'http:192.168.0.102:4444/' + item_sp.image }}/>
      
       <View style={{ marginLeft: 30 }}>
-        <Text style={styles.texthihi}>Địa phủ đế vương</Text>
-        <Text style={styles.texthihi}>Tác giả: Mạc Thanh Hải</Text>
-        <Text style={styles.texthihi}>Ngày xuất bản: 22/12/2022</Text>
+        <Text style={styles.texthihi}> {item_sp.Mauser}</Text>
+        <Text style={styles.texthihi}>Tác giả: {item_sp.tacgia}</Text>
+        <Text style={styles.texthihi}>Ngày xuất bản: {item_sp.ngayxuatban}</Text>
       </View>
       <View style={{ flexDirection: 'row', marginTop: 20 }}>
-        <TouchableOpacity style={styles.buttonhihi}>
+        <TouchableOpacity style={styles.buttonhihi} onPress={click}>
           <Text style={{ fontWeight: '600' }}>Đọc Truyện</Text>
         </TouchableOpacity>
 
@@ -29,13 +38,12 @@ const chitiet = (props) => {
 
       <View>
         <Text style={{ backgroundColor: '#62CDFF', fontWeight: 'bold', fontSize: 17, marginTop: 20, padding: 6 }}>Tóm tắt Nội dung</Text>
-        <Text style={{ margin: 5 }}>
-          Ba trăm năm trước Địa Phủ lâm vào khói lửa,
-          trong một đêm hoang tàn sạch sẽ, cô liêu hiu quạnh,
-          oán hận chôn vùi vào tương lại mờ mịt,vạn kiếp bất p
-          hục. Ba trăm năm trước địa phủ, một mình chống toàn tộc
-          ,đầu Tam Giơi, dẹp tan chiến loạn.
-        </Text>
+        <View>
+        {/* <ScrollView style={{ margin: 5 }}> {item_sp.mota}    </ScrollView> */}
+        <ScrollView>
+          <Text > {item_sp.mota}   </Text>
+        </ScrollView>
+        </View>
       </View>
     </View>
   )
