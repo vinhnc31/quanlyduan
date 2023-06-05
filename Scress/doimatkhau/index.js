@@ -1,8 +1,7 @@
 import { useState } from 'react';
 import React from 'react';
 import { View, StyleSheet, TextInput, Pressable, Text, Alert } from 'react-native';
-
-
+import { API_USE } from "../../helper/Api";
 
 const doimk = (props) => {
     const navigation = props.navigation;
@@ -18,6 +17,7 @@ const doimk = (props) => {
     const validateOldPassword = () => {
         if (oldPassword.length === 0) {
             setOldPasswordError('Mật cũ không được để trống');
+            return false;
         } else {
             setOldPasswordError('');
         }
@@ -26,8 +26,10 @@ const doimk = (props) => {
     const validateNewPassword = () => {
         if (newPassword.length === 0) {
             setNewPasswordError('Mật khẩu mới được để trống');
+            return false;
         } else if (newPassword.length < 6) {
             setNewPasswordError('Mật khẩu mới phải có ít nhất 6 ký tự');
+            return false;
         } else {
             setNewPasswordError('');
         }
@@ -36,8 +38,10 @@ const doimk = (props) => {
     const validateConfirmPassword = () => {
         if (confirmPassword.length === 0) {
             setConfirmPasswordError('Xác nhận mật không được để trống');
+            return false;
         } else if (confirmPassword !== newPassword) {
             setConfirmPasswordError('Xác nhận mật khẩu không giống với mật khẩu mới');
+            return false;
         } else {
             setConfirmPasswordError('');
         }
@@ -52,11 +56,25 @@ const doimk = (props) => {
         validateNewPassword();
         validateConfirmPassword();
         if (!oldPasswordError && !newPasswordError && !confirmPasswordError) {
-            Alert.alert('Thông Báo', 'Mật khẩu đã được thay đổi thành công !', [
-                { text: 'OK', onPress: () => navigateToAccount() }
-            ]);
-        } else {
-            Alert.alert('Lỗi', 'Kiểm tra lại thông tin bạn đã nhập !',[{text: 'OK'}]);
+            const data = {
+                oldPassword,
+                newPassword,
+            };
+            fetch(API_USE + "/doimk", {
+                method: "POST",
+                body: JSON.stringify(data),
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            }).then((reponse) => {
+                if (!reponse.ok) {
+                    setError("Tài khoản không chính xác !");
+                } else {
+                    Alert.alert('Thông Báo', 'Mật khẩu đã được thay đổi thành công !', [
+                        { text: 'OK', onPress: () => navigateToAccount() }
+                    ]);
+                }
+            }).catch((err) => console.log(err));
         }
     };
 
