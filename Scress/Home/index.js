@@ -21,7 +21,7 @@ const home = (props) => {
   };
 
   const getProduct = () => {
-    fetch(API_PRODUCT + "/getAllsp")
+    fetch("https://9fb7-14-247-239-0.ngrok-free.app/Book/api")
       .then((item) => item.json())
       .then((data) => setData(data))
       .catch((err) => console.log(err));
@@ -29,7 +29,6 @@ const home = (props) => {
 
   useEffect(() => {
     getProduct();
-    //  getProduct()
   }, []);
 
   // useEffect(() => {
