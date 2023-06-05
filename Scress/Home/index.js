@@ -8,11 +8,14 @@ const  Home= (props) => {
   const [searchText, setSearchText] = useState("");
   
   const getProduct = () => {
-    fetch(API_PRODUCT + "/getAllsp")
-      .then((item) => item.json())
-      .then((data) => setData(data))
-      .catch((err) => console.log(err));
-  };
+    fetch("http://10.24.57.44:4000/Book/api")
+        .then(item => item.json())
+        .then(data => {
+           console.log(data);
+          setData(data)})
+        .catch(err => console.log(err))
+}
+
 
   useEffect(() => {
     getProduct();
