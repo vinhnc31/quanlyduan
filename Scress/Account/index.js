@@ -1,11 +1,44 @@
 import React from "react";
 import { View, Text, StyleSheet, Image } from "react-native";
 import { Pressable } from "react-native";
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useState, useEffect } from "react";
+
 const Account = (props) => {
   const navigation = props.navigation;
+
+  const [authInfo, setAuthInfo] = useState();
+  
   const ondmk = () => {
     navigation.navigate('doimk');
   }
+
+  // Funtion lấy data login từ AsyncStorage bộ nhớ tạm
+  const duLieuTamThoi = async () => {
+    try {
+        const authInfo = await AsyncStorage.getItem('authInfo');
+        if (authInfo !== null) {
+            console.log('authInfo của bộ nhớ tạm thời', authInfo);
+            setAuthInfo(JSON.parse(authInfo));
+        }
+    }catch (error) {
+        console.log(error);
+    }
+  };
+
+  // hàm logout
+  const doLogout = () => {
+    AsyncStorage.removeItem('authInfo');
+    navigation.reset({
+        index: 0,
+        routes: [{name: 'Dangnhap'}]
+    });
+  };
+
+  useEffect(() => {
+    duLieuTamThoi();
+  }, []); 
+
   return (
     <View style={styles.container}>
       <View style={styles.heard}>
@@ -20,7 +53,7 @@ const Account = (props) => {
         <Text style={styles.textButton}>Đổi mật khẩu</Text>
       </Pressable>
 
-      <Pressable style={styles.button}>
+      <Pressable style={styles.button} onPress={() => doLogout()}>
         <Text style={styles.textButton}>Đăng Xuất</Text>
       </Pressable>
     </View>

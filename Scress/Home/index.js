@@ -42,12 +42,12 @@ const home = (props) => {
   //   setFilteredData(newData);
   // }, [searchText]);
 
-  const renderItem = ({ item }) => (
-    <View style={styles.itemContainer}>
-      <Image source={{ uri: item.imgsp }} style={styles.itemImage} />
-      <Text style={styles.itemName}>{item.tensp}</Text>
-    </View>
-  );
+  // const renderItem = ({ item }) => (
+  //   <View style={styles.itemContainer}>
+  //     <Image source={{ uri: item.image }} style={styles.itemImage} />
+  //     <Text style={styles.itemName}>{item.Tenuser}</Text>
+  //   </View>
+  // );
 
   return (
     <ScrollView>
@@ -63,14 +63,27 @@ const home = (props) => {
       <FlatList
         horizontal
         data={data}
-        renderItem={renderItem}
         keyExtractor={(item) => item.id}
+        renderItem={({item}) => {
+          return (
+            <View style={styles.itemContainer}>
+              <Text style={styles.itemName}>{item.nameTheloai}</Text>
+            </View>
+          )
+        }}
       />
       <Text style={styles.text}>Top sách xem nhiều nhất</Text>
       <FlatList
         data={data}
-        renderItem={renderItem}
         keyExtractor={(item) => item.id}
+        renderItem={({item}) => {
+          return(
+            <View style={styles.itemContainer}>
+              <Image source={{ uri: item.image }} style={styles.itemImage} />
+              <Text style={styles.itemName}>{item.Tenuser}</Text>
+            </View>
+          )
+        }}
       />
     </ScrollView>
   );

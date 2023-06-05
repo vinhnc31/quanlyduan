@@ -7,7 +7,8 @@ import {
   TouchableOpacity,
   CheckBox
 } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import dangky from "../Dangky";
 import home from "../Home";
 import { API_USE } from "../../helper/Api";
@@ -19,7 +20,18 @@ const dangnhap = (props) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+  // Funtion lưu thông tin authentication vào AsyncStorage
+  const storageAutheInfo = async (value) => {
+    try {
+        const authInfo = JSON.stringify(value);
+        await AsyncStorage.setItem('authInfo', authInfo);
+    } catch (error) {
+        console.log(error);
+    }
+  };
+
   const onLogin = () => {
+
     // const data = {
     //   email,
     //   password,
@@ -35,6 +47,8 @@ const dangnhap = (props) => {
     //     if (!reponse.ok) {
     //       setError("Tài khoản không chính xác !");
     //     } else {
+            let request = {email, password};
+            storageAutheInfo(request);
     //       navigation.navigate("Home");
     //     }
     //   })
@@ -42,6 +56,7 @@ const dangnhap = (props) => {
 
     navigation.navigate("Home")
   };
+  
   return (
     <View style={styles.container}>
       <Text style={styles.text}>ĐĂNG NHẬP</Text>
