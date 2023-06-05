@@ -6,19 +6,21 @@ const dangky = (props) => {
   const chuyenMh = (props) => {
     navigation.navigate(props);
   };
-  const [name, setName] = useState("");
+  const [nameUser, setnameUser] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
   const [checkValidateName, setCheckValidateName] = useState(true);
   const [checkValidateEmail, setCheckValidateEmail] = useState(false);
 
   const onLogout = () => {
     const data = {
-      name,
+      nameUser,
       email,
       password,
-    };
-    fetch(API_USE + "/dangky", {
+    }
+   
+    fetch('http://192.168.1.182:4000/User/addUser', {
       method: "POST",
       body: JSON.stringify(data),
       headers: {
@@ -44,9 +46,9 @@ const dangky = (props) => {
     <View style={styles.container}>
       <Text style={styles.text}>ĐĂNG KÝ</Text>
       <TextInput
-        placeholder="Name"
-        onChangeText={setName}
-        value={name}
+        placeholder="nameUser"
+        onChangeText={setnameUser}
+        value={nameUser}
         style={styles.input}
       />
 
