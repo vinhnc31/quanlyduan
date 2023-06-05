@@ -1,54 +1,58 @@
-import React from "react";
-import {
-  ScrollView,
-  FlatList,
-  View,
-  Text,
-  Image,
-  StyleSheet,
-  TextInput,
-} from "react-native";
-import { useEffect, useState } from "react";
-import { API_PRODUCT } from "../../helper/Api";
+import React, { useEffect, useState } from "react";
+import { ScrollView, FlatList, View, Text, TextInput, StyleSheet,Image } from "react-native";
 
-const home = (props) => {
+const  Home= (props) => {
   const navigation = props.navigation;
   const [data, setData] = useState([]);
-  const [searchText, setSearchText] = useState("");
-  const [filteredData, setFilteredData] = useState(data);
-  const chuyenMh = (props) => {
-    navigation.navigate(props);
-  };
 
+  const [searchText, setSearchText] = useState("");
+  
   const getProduct = () => {
-    fetch(API_PRODUCT + "/getAllsp")
-      .then((item) => item.json())
-      .then((data) => setData(data))
-      .catch((err) => console.log(err));
-  };
+    fetch("http://10.24.57.44:4000/Book/api")
+        .then(item => item.json())
+        .then(data => {
+           console.log(data);
+          setData(data)})
+        .catch(err => console.log(err))
+}
+
 
   useEffect(() => {
     getProduct();
-    //  getProduct()
   }, []);
 
+  console.log("aa"+ data.sp)
+
   // useEffect(() => {
-  //   // Lọc dữ liệu theo từ khóa tìm kiếm
-  //   const newData = data.filter(item => {
-  //     const itemName = item.name.toLowerCase();
-  //     const searchValue = searchText.toLowerCase();
-  //     return itemName.indexOf(searchValue) > -1;
-  //   });
-  //   setFilteredData(newData);
-  // }, [searchText]);
+  //   const filteredResult = data.filter(
+  //     (item) =>
+  //       item.nameBook.toLowerCase().includes(searchText.toLowerCase()) // Lọc dữ liệu theo tên sách
+  //   );
+  //   setFilteredData(filteredResult);
+  // }, [searchText, data]);
 
-  const renderItem = ({ item }) => (
-    <View style={styles.itemContainer}>
-      <Image source={{ uri: item.imgsp }} style={styles.itemImage} />
-      <Text style={styles.itemName}>{item.tensp}</Text>
-    </View>
-  );
 
+  const renderItem = ({ item }) => {
+    
+    return (
+      <View style={styles.itemContainer}>
+        <Text style={styles.itemName}> {item.cotegary}
+
+        </Text>
+      </View>
+    );
+  };
+
+  const renderItemProduct = ({ item }) => {
+    
+    return (
+      <View style={styles.itemContainer2}>
+          <Image source={{ uri:'http:10.24.57.44:4000/'+item.image }} style={styles.itemImage2} />
+        <Text style={styles.itemName}>Name: {item.author}
+        </Text>
+      </View>
+    );
+  };
   return (
     <ScrollView>
       <View style={styles.searchContainer}>
@@ -59,61 +63,90 @@ const home = (props) => {
           onChangeText={(text) => setSearchText(text)}
         />
       </View>
-      <Text style={styles.text}>Thể Loại</Text>
-      <FlatList
-        horizontal
-        data={data}
-        renderItem={renderItem}
-        keyExtractor={(item) => item.id}
-      />
-      <Text style={styles.text}>Top sách xem nhiều nhất</Text>
-      <FlatList
-        data={data}
-        renderItem={renderItem}
-        keyExtractor={(item) => item.id}
-      />
+  
+      <View style={styles.text}>
+        <Text style={styles.text}>Thể Loại</Text>
+        <FlatList
+          horizontal
+          data={data.sp}
+          keyExtractor={(item) => item.id}
+          renderItem={renderItem}
+        />
+      </View>
+  
+      <View style={styles.text}>
+        <Text style={styles.text}>Danh sách</Text>
+        <FlatList
+          data={data.sp}
+          numColumns={2}
+          keyExtractor={(item) => item.id}
+          renderItem={renderItemProduct}
+        />
+      </View>
     </ScrollView>
   );
-};
+}
 
 const styles = StyleSheet.create({
-  itemContainer: {
-    flexDirection: "column",
-    alignItems: "center",
-    margin: 8,
+  container: {
+    flex: 1,
   },
-  itemImage: {
-    width: 70,
-    height: 70,
-    borderRadius: 50,
+  itemContainer: {
+    borderWidth: 1,
+    borderColor: 'gray',
+    padding: 10,
+    borderRadius: 5,
+    marginBottom: 10,
+    margin: 10,
+  },
+  itemContainer2: {
+    flexDirection: 'column',
+    alignItems: 'center',
+    marginBottom: 10,
+    flexBasis: '50%',
   },
   itemName: {
     fontSize: 16,
-    marginTop: 8,
-    textAlign: "center",
   },
   searchContainer: {
-    marginTop: 10,
-    marginBottom: 10,
-    borderBottomWidth: 1,
-    borderBottomColor: "#ccc",
+    padding: 10,
+    backgroundColor: '#f2f2f2',
   },
   searchInput: {
     height: 40,
-    borderWidth: 2,
-    borderColor: "#ccc",
-    borderRadius: 10,
-    paddingHorizontal: 16,
-    marginBottom: 10,
-    fontSize: 16,
-    color: "#333",
-    backgroundColor: "#f9f9f9",
-    marginTop: 15,
+    backgroundColor: '#ffffff',
+    paddingHorizontal: 10,
+    borderRadius: 5,
   },
   text: {
-    fontSize: 20,
-    fontWeight: "bold",
-    marginVertical: 10,
+    padding: 10,
+  },
+  sectionTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 10,
+  },
+  listItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 10,
+  },
+  itemImage2: {
+    width: 100,
+    height: 100,
+    marginBottom: 10,
+    borderRadius: 5,
+  },
+
+  itemImage: {
+    width: 50,
+    height: 50,
+    marginRight: 10,
+  },
+  itemText: {
+    fontSize: 16,
   },
 });
-export default home;
+
+
+export default Home;

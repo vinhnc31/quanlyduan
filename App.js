@@ -14,7 +14,7 @@ import doimk from "./Scress/doimatkhau";
 const App = () => {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="SplashScreen">
+      <Stack.Navigator initialRouteName="Home">
         <Stack.Screen
           name="SplashScreen"
           component={SplashScreen}

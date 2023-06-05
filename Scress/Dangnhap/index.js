@@ -11,6 +11,7 @@ import React, { useState } from "react";
 import dangky from "../Dangky";
 import home from "../Home";
 import { API_USE } from "../../helper/Api";
+
 const dangnhap = (props) => {
   const navigation = props.navigation;
   const chuyenMh = (props) => {
@@ -18,39 +19,57 @@ const dangnhap = (props) => {
   };
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [checkValidateEmail, setCheckValidateEmail] = useState(false);
+  const [error, setError] = useState("");
 
   const onLogin = () => {
-    // const data = {
-    //   email,
-    //   password,
-    // };
-    // fetch(API_USE + "/dangnhap", {
-    //   method: "POST",
-    //   body: JSON.stringify(data),
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //   },
-    // })
-    //   .then((reponse) => {
-    //     if (!reponse.ok) {
-    //       setError("Tài khoản không chính xác !");
-    //     } else {
-    //       navigation.navigate("Home");
-    //     }
-    //   })
-    //   .catch((err) => console.log(err));
-
-    navigation.navigate("Home")
+      const data = {
+        email,
+        password,
+      }
+      fetch('http://192.168.1.182:4000/User/login', {
+        method: "POST",
+        body: JSON.stringify(data),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+        .then((response) => {
+          if (!response.ok) {
+            setError("Tài khoản không chính xác !");
+          } else {
+            navigation.navigate("Home");
+          }
+        })
+        .catch((err) => console.log(err));
+    
   };
+  const handlerCheckEmail = (text) => {
+    const reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+    setEmail(text);
+    if (text.trim() === "") {
+      setCheckValidateEmail(true);
+    } else {
+      reg.test(text) ? setCheckValidateEmail(false) : setCheckValidateEmail(true);
+    }
+  };
+  
   return (
     <View style={styles.container}>
       <Text style={styles.text}>ĐĂNG NHẬP</Text>
       <TextInput
         placeholder="Email"
-        onChangeText={setEmail}
         value={email}
         style={styles.input}
+        onChangeText={(text) => {
+          handlerCheckEmail(text);
+        }}
       />
+        {checkValidateEmail ? (
+        <Text style={styles.checkText}>Email sai định dạng</Text>
+      ) : (
+        <Text></Text>
+      )}
       <TextInput
         placeholder="Password"
         onChangeText={setPassword}

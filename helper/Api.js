@@ -1,3 +1,3 @@
-export const API_URL='http:192.168.1.182:9999';
-export const API_USE= API_URL +'/user';
-export const API_PRODUCT = API_URL +'/product';
+export const API_URL='192.168.1.182:4000';
+export const API_PRODUCT = API_URL +'/Book';
+

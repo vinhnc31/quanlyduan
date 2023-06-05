@@ -27,7 +27,7 @@ const TabNaviagation = (props) => {
         };
       }}
     >
-      <Tab.Screen name="home" component={home} options={{headerShown: false}} />  
+      <Tab.Screen name="home" component={home} options={{headerShown: true}} />  
       <Tab.Screen name="Favorite" component={Favourite}  options={{headerShown: false}}/>
       <Tab.Screen name="Account" component={Account}  options={{headerShown: false}}/>
     </Tab.Navigator>
