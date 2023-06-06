@@ -6,21 +6,22 @@ const dangky = (props) => {
   const chuyenMh = (props) => {
     navigation.navigate(props);
   };
-  const [name, setName] = useState("");
+  const [nameUser, setnameUser] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [repassword, setRepassword] = useState("");
+  const [error, setError] = useState("");
   const [checkValidatePwd, setCheckValidatePwd] = useState(false);
   const [checkValidateName, setCheckValidateName] = useState(true);
   const [checkValidateEmail, setCheckValidateEmail] = useState(false);
 
   const onRegister = () => {
     const data = {
-      name,
+      nameUser,
       email,
       password,
     };
-    fetch(API_USE + "/dangky", {
+    fetch('http://192.168.1.182:4000/User/addUser', {
       method: "POST",
       body: JSON.stringify(data),
       headers: {
@@ -39,7 +40,7 @@ const dangky = (props) => {
 
   const handlerCheckName = (text) => {
     const name = text == '';
-    setName(text);
+    setnameUser(text);
     name ? setCheckValidateName(false) : setCheckValidateName(true);
   };
 
@@ -63,7 +64,7 @@ const dangky = (props) => {
         onChangeText={(text) => {
           handlerCheckName(text);
         }}
-        value={name}
+        value={nameUser}
         style={styles.input}
       />
       {checkValidateName ? (

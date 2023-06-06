@@ -12,6 +12,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import dangky from "../Dangky";
 import home from "../Home";
 import { API_USE } from "../../helper/Api";
+
 const dangnhap = (props) => {
   const navigation = props.navigation;
   const chuyenMh = (props) => {
@@ -19,53 +20,69 @@ const dangnhap = (props) => {
   };
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [checkValidateEmail, setCheckValidateEmail] = useState(false);
+  const [error, setError] = useState("");
 
   // Funtion lưu thông tin authentication vào AsyncStorage
   const storageAutheInfo = async (value) => {
     try {
-        const authInfo = JSON.stringify(value);
-        await AsyncStorage.setItem('authInfo', authInfo);
+      const authInfo = JSON.stringify(value);
+      await AsyncStorage.setItem('authInfo', authInfo);
     } catch (error) {
-        console.log(error);
+      console.log(error);
     }
   };
 
   const onLogin = () => {
+    const data = {
+      email,
+      password,
+    }
+    fetch('http://192.168.1.182:4000/User/login', {
+      method: "POST",
+      body: JSON.stringify(data),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => {
+        if (!response.ok) {
+          setError("Tài khoản không chính xác !");
+        } else {
+          let request = { email, password };
+          storageAutheInfo(request);
+          navigation.navigate("Home");
+        }
+      })
+      .catch((err) => console.log(err));
 
-    // const data = {
-    //   email,
-    //   password,
-    // };
-    // fetch(API_USE + "/dangnhap", {
-    //   method: "POST",
-    //   body: JSON.stringify(data),
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //   },
-    // })
-    //   .then((reponse) => {
-    //     if (!reponse.ok) {
-    //       setError("Tài khoản không chính xác !");
-    //     } else {
-            let request = {email, password};
-            storageAutheInfo(request);
-    //       navigation.navigate("Home");
-    //     }
-    //   })
-    //   .catch((err) => console.log(err));
-
-    navigation.navigate("Home")
   };
-  
+  const handlerCheckEmail = (text) => {
+    const reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+    setEmail(text);
+    if (text.trim() === "") {
+      setCheckValidateEmail(true);
+    } else {
+      reg.test(text) ? setCheckValidateEmail(false) : setCheckValidateEmail(true);
+    }
+  };
+
   return (
     <View style={styles.container}>
       <Text style={styles.text}>ĐĂNG NHẬP</Text>
       <TextInput
         placeholder="Email"
-        onChangeText={setEmail}
+        onChangeText={(text) => {
+          handlerCheckEmail(text);
+        }}
         value={email}
         style={styles.input}
       />
+      {checkValidateEmail ? (
+        <Text style={styles.checkText}>Email sai định dạng</Text>
+      ) : (
+        <Text></Text>
+      )}
       <TextInput
         placeholder="Password"
         onChangeText={setPassword}
@@ -73,14 +90,14 @@ const dangnhap = (props) => {
         secureTextEntry={true}
         style={styles.input}
       />
-      
+
       <Pressable style={styles.button} onPress={() => onLogin()}>
         <Text style={styles.textButton}>Đăng Nhập</Text>
       </Pressable>
-      <View style = {styles.viewRegister}>
+      <View style={styles.viewRegister}>
         <Text style={styles.registerText}>
-          Bạn chưa có tài khoản? 
-          <TouchableOpacity  onPress={() => chuyenMh(dangky)}>
+          Bạn chưa có tài khoản?
+          <TouchableOpacity onPress={() => chuyenMh(dangky)}>
             <Text style={styles.btnRegister}>Đăng ký</Text>
           </TouchableOpacity>
         </Text>
@@ -133,15 +150,15 @@ const styles = StyleSheet.create({
   },
   btnRegister: {
     fontSize: 16,
-    marginTop:15,
+    marginTop: 15,
     color: "#0093FD",
   },
   checkboxContainer: {
     flexDirection: "row",
     marginBottom: 20,
   },
-  viewRegister: { 
-    marginTop : 20
+  viewRegister: {
+    marginTop: 20
   }
 });
 
