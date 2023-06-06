@@ -1,6 +1,6 @@
 import { Text, View, Pressable, TextInput, StyleSheet } from "react-native";
 import React, { useState } from "react";
-import { API_USE } from "../../helper/Api";
+import { API_USER_ADD } from "../../helper/Api";
 const dangky = (props) => {
   const navigation = props.navigation;
   const chuyenMh = (props) => {
@@ -12,7 +12,7 @@ const dangky = (props) => {
   const [repassword, setRepassword] = useState("");
   const [error, setError] = useState("");
   const [checkValidatePwd, setCheckValidatePwd] = useState(false);
-  const [checkValidateName, setCheckValidateName] = useState(true);
+  const [checkValidateName, setCheckValidateName] = useState(false);
   const [checkValidateEmail, setCheckValidateEmail] = useState(false);
 
   const onRegister = () => {
@@ -21,7 +21,7 @@ const dangky = (props) => {
       email,
       password,
     };
-    fetch('http://192.168.1.182:4000/User/addUser', {
+    fetch(API_USER_ADD, {
       method: "POST",
       body: JSON.stringify(data),
       headers: {
@@ -41,7 +41,7 @@ const dangky = (props) => {
   const handlerCheckName = (text) => {
     const name = text == '';
     setnameUser(text);
-    name ? setCheckValidateName(false) : setCheckValidateName(true);
+    !name ? setCheckValidateName(false) : setCheckValidateName(true);
   };
 
   const handlerCheckEmail = (text) => {

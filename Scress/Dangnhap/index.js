@@ -11,7 +11,7 @@ import React, { useEffect, useState } from "react";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import dangky from "../Dangky";
 import home from "../Home";
-import { API_USE } from "../../helper/Api";
+import { API_USER_LOGIN } from "../../helper/Api";
 
 const dangnhap = (props) => {
   const navigation = props.navigation;
@@ -38,7 +38,7 @@ const dangnhap = (props) => {
       email,
       password,
     }
-    fetch('http://192.168.1.182:4000/User/login', {
+    fetch(API_USER_LOGIN, {
       method: "POST",
       body: JSON.stringify(data),
       headers: {
@@ -49,9 +49,9 @@ const dangnhap = (props) => {
         if (!response.ok) {
           setError("Tài khoản không chính xác !");
         } else {
-          // //luu thong tin vao bo nho tạm
-          // let request = { email, password };
-          // storageAutheInfo(request);
+          //luu thong tin vao bo nho tạm
+          const request = { email, password };
+          storageAutheInfo(request);
           navigation.navigate("Home");
         }
       })

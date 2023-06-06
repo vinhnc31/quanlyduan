@@ -7,7 +7,7 @@ import { useState, useEffect } from "react";
 const Account = (props) => {
   const navigation = props.navigation;
 
-  const [authInfo, setAuthInfo] = useState();
+  const [authInfo, setAuthInfo] = useState(AsyncStorage.getItem('authInfo'));
   
   const ondmk = () => {
     navigation.navigate('doimk');
@@ -45,7 +45,7 @@ const Account = (props) => {
         <Image style={styles.img} source={require("../../Avata/avata.png")} />
         <View>
           <Text style={styles.title}>Tài khoản của bạn</Text>
-          <Text style={styles.text}>hoangtv@gmail.com</Text>
+          <Text style={styles.text}>{authInfo.email}</Text>
         </View>
       </View>
 
@@ -81,7 +81,6 @@ const styles = StyleSheet.create({
     marginLeft: 31,
   },
   text: {
-    width: 150,
     height: 33,
     fontWeight: "400",
     fontSize: 16,

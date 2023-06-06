@@ -1,7 +1,7 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import React from 'react';
 import { View, StyleSheet, TextInput, Pressable, Text, Alert } from 'react-native';
-import { API_USE } from "../../helper/Api";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const doimk = (props) => {
     const navigation = props.navigation;
@@ -14,9 +14,30 @@ const doimk = (props) => {
     const [newPasswordError, setNewPasswordError] = useState('');
     const [confirmPasswordError, setConfirmPasswordError] = useState('');
 
+    const [authInfo, setAuthInfo] = useState(AsyncStorage.getItem('authInfo'));
+    // Funtion lấy data login từ AsyncStorage bộ nhớ tạm
+    const duLieuTamThoi = async () => {
+        try {
+            const authInfo = await AsyncStorage.getItem('authInfo');
+            if (authInfo !== null) {
+                console.log('authInfo của bộ nhớ tạm thời', authInfo);
+                setAuthInfo(JSON.parse(authInfo));
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+    useEffect(() => {
+        duLieuTamThoi();
+    }, []);
+
     const validateOldPassword = () => {
         if (oldPassword.length === 0) {
             setOldPasswordError('Mật cũ không được để trống');
+            return false;
+        } else if (oldPassword !== authInfo.password) {
+            setOldPasswordError("Mật khẩu không chính xác !");
             return false;
         } else {
             setOldPasswordError('');
@@ -48,7 +69,7 @@ const doimk = (props) => {
     };
 
     const navigateToAccount = () => {
-        navigation.navigate('Account');
+        navigation.navigate('Dangnhap');
     };
 
     const handleSubmit = () => {
@@ -57,10 +78,9 @@ const doimk = (props) => {
         validateConfirmPassword();
         if (!oldPasswordError && !newPasswordError && !confirmPasswordError) {
             const data = {
-                oldPassword,
-                newPassword,
+                newPassword
             };
-            fetch(API_USE + "/doimk", {
+            fetch("link api tuyen newpass", {
                 method: "POST",
                 body: JSON.stringify(data),
                 headers: {
@@ -68,7 +88,7 @@ const doimk = (props) => {
                 },
             }).then((reponse) => {
                 if (!reponse.ok) {
-                    setError("Tài khoản không chính xác !");
+                    setOldPassword("Mật khẩu không chính xác !");
                 } else {
                     Alert.alert('Thông Báo', 'Mật khẩu đã được thay đổi thành công !', [
                         { text: 'OK', onPress: () => navigateToAccount() }
