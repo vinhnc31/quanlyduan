@@ -49,8 +49,9 @@ const dangnhap = (props) => {
         if (!response.ok) {
           setError("Tài khoản không chính xác !");
         } else {
-          let request = { email, password };
-          storageAutheInfo(request);
+          // //luu thong tin vao bo nho tạm
+          // let request = { email, password };
+          // storageAutheInfo(request);
           navigation.navigate("Home");
         }
       })
