@@ -1,205 +1,219 @@
-import React from 'react';
-import { ScrollView, FlatList, View, Text, Image, StyleSheet, TextInput, TouchableOpacity } from 'react-native';
-import { useEffect, useState } from 'react';
-import { API_PRODUCT } from '../../helper/Api';
-import { API_THELOAI } from '../../helper/Api';
-import chitiet from './chitiet';
+import React, { useEffect, useState } from "react";
+import Icon from 'react-native-vector-icons/FontAwesome';
 
-const home = (props) => {
-  
-  const [data, setData] = useState([]);
-  const [data1, setData1] = useState([]);
-  const [searchText, setSearchText] = useState('');
-  const [filteredData, setFilteredData] = useState(data);
+import { ScrollView, FlatList, View, Text, TextInput, StyleSheet, Image, TouchableHighlight, TouchableOpacity } from "react-native";
+import filter from "lodash.filter";
+
+
+const API_ENDPOINT = 'http://172.20.10.6:4000/Book/api'
+
+const index = (props) => {
   const navigation = props.navigation;
-  const chuyenMh = (item) => {
-    navigation.navigate(chitiet,{item});
-    
+  const [data, setdata] = useState([]);
+  const [fulldata, setfulldata] = useState([])
+  const [searchQuery, setsearchQuery] = useState('')
+
+
+  const getProduct = async () => {
+    try {
+      const response = await fetch(API_ENDPOINT)
+      const json = await response.json();
+      setdata(json.sp)
+      console.log("danh sách", json.sp);
+      setfulldata(json.sp);// chuc nang chi tiet 
+
+    } catch (error) {
+      console.log('có lỗi có lỗi rồi ');
+    }
   }
 
-  const getProducttl = () => {
-    fetch(API_THELOAI + "/getAlltl")
-      .then(item => item.json())
-      .then(data => setData(data))
-      .catch(err => console.log(err))
+
+  useEffect(() => {
+    getProduct();
+  }, []);
+
+  const handleSearch = (query) => {
+    setsearchQuery(query)
+    const formattedQuery = query;
+    const filteredData = filter(fulldata, (sp) => {
+      return contains(sp, formattedQuery);
+      // 
+    });
+    setdata(filteredData)
   }
 
 
 
-  const getProduct = () => {
-    fetch(API_PRODUCT + "/getAllsp")
-      .then(item => item.json() ,  )
-   
-      .then(data1 => setData1(data1) )
-      .catch(err => console.log(err))
+  const contains = ({ nameBook, cotegary }, query) => {
+    if (nameBook.includes(query)) {
+      return true;
+    }
+    return false
+
   }
 
-  useEffect((item) => {
-    getProducttl()
-    getProduct()
-  
-  }, [])
+
+  // useEffect(() => {
+  //   const filteredResult = data.filter(
+  //     (item) =>
+  //       item.nameBook.toLowerCase().includes(searchText.toLowerCase()) // Lọc dữ liệu theo tên sách
+  //   );
+  //   setFilteredData(filteredResult);
+  // }, [searchText, data]);
 
 
+  const renderItem = ({ item }) => {
 
+    return (
+      <TouchableOpacity style={styles.itemContainer} onPress={() => { navigation.navigate('theloai') }}>
+           
+        <Text style={{ fontSize: 10, color: "black" }}> {item.cotegary} </Text>      
+     
+      </TouchableOpacity>
+    );
+  };
 
+  const renderItemProduct = ({ item }) => {
 
+    return (
+      <View style={styles.itemContainer2}>
 
-
+        <TouchableOpacity onPress={() => { navigation.navigate('chitiet', { item_sp: item }) }}>
+          <View style={{ borderWidth: 1, alignItems: "center", height: 170,width:130, paddingTop: 7 }}>
+            <Image source={{ uri: 'http:172.20.10.6:4000/' + item.image }} style={styles.itemImage2} />
+            <Text style={styles.itemName}>{item.nameBook} </Text>
+          </View>
+        </TouchableOpacity>
+      </View>
+    );
+  };
   return (
     <ScrollView>
-      <View style={styles.searchContainer}>
-        <TextInput
-          style={styles.searchInput}
-          placeholder="Tìm kiếm"
-          value={searchText}
-          onChangeText={text => setSearchText(text)}
+      <View style={{ flex: 1, marginHorizontal: 20, marginTop: 40 }}>
+        <TextInput placeholder='Search'
+          clearButtonMode='always'// tạo nút bấm xóa 
+          // không tự động viết hoa đầu dòng 
+          autoCorrect={false}
+          value={searchQuery}
+          onChangeText={(query) => { handleSearch(query) }}
+          style={styles.input} />
+          <Icon name="search" size={20} color="gray" style={styles.searchIcon} />
+
+
+      </View>
+
+      <View style={styles.text}>
+        <Text style={styles.text}>Thể Loại</Text>
+        <FlatList
+          horizontal
+          data={data}
+          keyExtractor={(item) => item.id}
+          renderItem={renderItem}
         />
       </View>
-      <Text style={{ fontSize: 20, fontWeight: 'bold', marginVertical: 10, marginLeft: 10 }}>
-        Thể loại
-      </Text>
-      <FlatList
-        horizontal
-        data={data}
-        keyExtractor={(item) => item.id}
-        renderItem={({ item }) => {
-          return (
-            <View style={styles.itemContainer}>
-              {/* <Image source={{ uri: item.imgTheloai }} style={styles.itemImage} /> */}
-              <Text style={styles.itemName}>{item.nameTheloai}</Text>
-            </View>
-
-          );
-        }}
-      />
-      <Text style={{ fontSize: 20, fontWeight: 'bold', marginVertical: 10, marginLeft: 10 }}>
-        Top sách xem nhiều nhất
-      </Text >
-      <View style={styles.vertical} >
+      <View style={styles.text}>
+        <Text style={styles.text}>Danh sách</Text>
         <FlatList
-          data={data1}
-          keyExtractor={(item) => item.id}
+          data={data}
           numColumns={2}
-          renderItem={({ item }) => {
-            return (
-              <TouchableOpacity onPress={() =>{navigation.navigate('chitiet',{ item_sp:item});}}>
-              <View style={styles.itemContainer2}>
-              
-                {/* ahhahahahahahkkkkkkkkkkkkkkkkkkkkkkkkkkkkk */}
-              <Image source={{ uri: 'http:192.168.0.102:4444/' + item.image }} style={styles.itemImage2}  />
-                <Text style={styles.itemName2}>{item.Tenuser}</Text>
-                
-              </View>
-              </TouchableOpacity>
-            );
-          }}
+          keyExtractor={(item) => item.id}
+          renderItem={renderItemProduct}
         />
       </View>
-      <Text style={{ fontSize: 20, fontWeight: 'bold', marginVertical: 10, marginLeft: 20 }}>
-        Đề xuất
-      </Text >
-      <View style={styles.vertical} >
+      <View style={styles.text}>
+        <Text style={styles.text}>Đề xuất </Text>
         <FlatList
-          data={data1}
-          keyExtractor={(item) => item.id}
+          data={data}
           numColumns={2}
-          renderItem={({ item }) => {
-            return (
-              <TouchableOpacity onPress={() =>{navigation.navigate('chitiet',{ item_sp:item});}}>
-              <View style={styles.itemContainer2}>
-                <Image source={{ uri: 'http:192.168.0.102:4444/' + item.image }} style={styles.itemImage2} />
-                <Text style={styles.itemName2}>{item.Tenuser}</Text>
-              </View>
-              </TouchableOpacity>
-
-            );
-          }}
+          keyExtractor={(item) => item.id}
+          renderItem={renderItemProduct}
         />
       </View>
     </ScrollView>
   );
-};
+}
 
 const styles = StyleSheet.create({
-  itemContainer: {
-    flexDirection: 'column',
-    borderWidth: 2,
-    borderColor: '#ccc',
-    borderRadius: 20,
-    paddingHorizontal: 16,
-    marginBottom: 10,
-    fontSize: 16,
-    color: '#333',
-    backgroundColor: '#f9f9f9',
-    margin: 8,
-    marginTop: 20
-
+  container: {
+    flex: 1,
   },
-
-
-  itemImage: {
-    width: 70,
-    height: 70,
-    textAlign: 'center',
-    borderRadius: 50,
+  itemContainer: {
+    borderWidth: 1,
+    borderColor: 'gray',
+    paddingHorizontal: 10,
+    borderRadius: 30,
+    height: 30,
+    margin: 6,
+    marginLeft:15,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  itemContainer2: {
+    flexDirection: 'column',
+    alignItems: 'center',
+    marginBottom: 10,
+    flexBasis: '50%',
+  },
+  searchBox: {
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    borderColor: '#ccc',
+    borderWidth: 1,
+    borderRadius: 8,
   },
   itemName: {
-    fontSize: 16,
-    marginTop: 8,
-    textAlign: 'center',
+    fontSize: 14,
   },
   searchContainer: {
-    marginTop: 10,
-    marginBottom: 10,
-    borderBottomWidth: 1,
-    borderBottomColor: '#ccc',
-
+    padding: 10,
+    backgroundColor: '#f2f2f2',
   },
   searchInput: {
-    height: 50,
-    borderWidth: 2,
-    borderColor: '#ccc',
-    borderRadius: 20,
-    paddingHorizontal: 16,
+    height: 40,
+    backgroundColor: '#ffffff',
+    paddingHorizontal: 10,
+    borderRadius: 5,
+  },
+  text: {
+    padding: 10,
+  },
+  sectionTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
     marginBottom: 10,
-    fontSize: 16,
-    color: '#333',
-    backgroundColor: '#f9f9f9',
-
   },
-  vertical: {
-    flex: 1,
-    height: "100%",
-    paddingLeft: 10
-
-
-  },
-
-  itemContainer2: {
+  listItem: {
+    flexDirection: 'row',
     alignItems: 'center',
-    marginLeft: 27,
-    margin: 10,
-    marginTop: 20
-  },
-  itemImage2: {
-    flex: 1,
-    width: 150,
-    height: 100,
-    borderWidth: 3,
-
-    borderColor: '#ccc',
+    marginBottom: 10,
+  }, itemImage2: {
+    width: 100,
+    height: 130,
+    marginBottom: 10,
+    borderRadius: 5,
   },
 
-  itemName2: {
+  itemImage: {
+    width: 50,
+    height: 0,
+    marginRight: 10,
+  },
+  itemText: {
     fontSize: 16,
-    marginTop: 8,
-
   },
-
-
-
-
+  input: {
+    height: 40,
+    borderWidth: 1,
+    borderColor: 'gray',
+    borderRadius: 8,
+    paddingLeft: 20, // Để tạo khoảng trống bên trái để chứa biểu tượng
+  },
+  searchIcon: {
+    position: 'absolute',
+    top: 10,
+    left: 280,
+  },
 });
 
-export default home;
+
+export default index;

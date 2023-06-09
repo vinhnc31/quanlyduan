@@ -12,11 +12,12 @@ import SplashScreen from "./Scress/Splash";
 import TabNaviagation from "./Scress/Tabnavigation";
 import home from "./Scress/Home";
 import chitiet from "./Scress/Home/chitiet";
+import theloai from "./Scress/Home/theloai";
 
 const App = () => {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="SplashScreen">
+      <Stack.Navigator initialRouteName="home">
         <Stack.Screen
           name="SplashScreen"
           component={SplashScreen}
@@ -37,6 +38,11 @@ const App = () => {
           component={chitiet}
           options={{ headerShown: false }}
         /> 
+         <Stack.Screen
+          name="theloai"
+          component={theloai}
+          options={{ headerShown: false }}
+        /> 
         <Stack.Screen
           name="dangky"
           component={dangky}
@@ -47,6 +53,7 @@ const App = () => {
           component={TabNaviagation}
           options={{ headerShown: false }}
         />
+         
       </Stack.Navigator>
 
     </NavigationContainer>
