@@ -1,4 +1,5 @@
 import React from "react";
+import { StyleSheet, Text, View ,Image} from 'react-native';
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Ionicons from "react-native-vector-icons/Ionicons";
 
@@ -18,6 +19,7 @@ const TabNaviagation = (props) => {
           let rn = route.name;
           if (rn === "Home") {
             iconName = focused ? "Home" : "HomeOutlined";
+            
           } else if (rn === "Favorite") {
             iconName = focused ? "Heart" : "HeartOutlined";
           } else if (rn === "Account") {

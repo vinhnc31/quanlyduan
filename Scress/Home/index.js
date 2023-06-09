@@ -1,27 +1,28 @@
 import React, { useEffect, useState } from "react";
-import { ScrollView, FlatList, View, Text, TextInput, StyleSheet,Image } from "react-native";
+import { ScrollView, FlatList, View, Text, TextInput, StyleSheet, Image, Button, TouchableOpacity } from "react-native";
+import SearchBook from "../searchBook";
 
-const  Home= (props) => {
+const Home = (props) => {
   const navigation = props.navigation;
   const [data, setData] = useState([]);
-
   const [searchText, setSearchText] = useState("");
-  
+
   const getProduct = () => {
-    fetch("http://10.24.57.44:4000/Book/api")
-        .then(item => item.json())
-        .then(data => {
-           console.log(data);
-          setData(data)})
-        .catch(err => console.log(err))
-}
+    fetch("http://192.168.1.182:4000/Book/api")
+      .then(item => item.json())
+      .then(data => {
+        console.log(data);
+        setData(data)
+      })
+      .catch(err => console.log(err))
+  }
 
 
   useEffect(() => {
     getProduct();
   }, []);
 
-  console.log("aa"+ data.sp)
+  console.log("aa" + data.sp)
 
   // useEffect(() => {
   //   const filteredResult = data.filter(
@@ -33,7 +34,7 @@ const  Home= (props) => {
 
 
   const renderItem = ({ item }) => {
-    
+
     return (
       <View style={styles.itemContainer}>
         <Text style={styles.itemName}> {item.cotegary}
@@ -44,10 +45,10 @@ const  Home= (props) => {
   };
 
   const renderItemProduct = ({ item }) => {
-    
+
     return (
       <View style={styles.itemContainer2}>
-          <Image source={{ uri:'http:10.24.57.44:4000/'+item.image }} style={styles.itemImage2} />
+        <Image source={{ uri: 'http:192.168.1.182:4000/' + item.image }} style={styles.itemImage2} />
         <Text style={styles.itemName}>Name: {item.author}
         </Text>
       </View>
@@ -56,14 +57,19 @@ const  Home= (props) => {
   return (
     <ScrollView>
       <View style={styles.searchContainer}>
-        <TextInput
-          style={styles.searchInput}
-          placeholder="Tìm kiếm"
-          value={searchText}
-          onChangeText={(text) => setSearchText(text)}
-        />
+    
+          <TextInput
+            style={styles.searchInput}
+            placeholder="Tìm kiếm"
+            value={searchText}
+            onChangeText={(text) => setSearchText(text)}
+          />
+
+    
+
+
       </View>
-  
+
       <View style={styles.text}>
         <Text style={styles.text}>Thể Loại</Text>
         <FlatList
@@ -73,7 +79,7 @@ const  Home= (props) => {
           renderItem={renderItem}
         />
       </View>
-  
+
       <View style={styles.text}>
         <Text style={styles.text}>Danh sách</Text>
         <FlatList

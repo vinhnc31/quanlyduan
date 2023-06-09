@@ -9,6 +9,7 @@ const dangky = (props) => {
   const [nameUser, setnameUser] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState("");
   const [checkValidateName, setCheckValidateName] = useState(true);
   const [checkValidateEmail, setCheckValidateEmail] = useState(false);
@@ -19,7 +20,11 @@ const dangky = (props) => {
       email,
       password,
     }
-   
+    if (password !== confirmPassword) {
+      setError("Mật khẩu không khớp");
+      return; // Ngừng thực hiện hành động đăng ký
+    }
+
     fetch('http://192.168.1.182:4000/User/addUser', {
       method: "POST",
       body: JSON.stringify(data),
@@ -45,12 +50,15 @@ const dangky = (props) => {
   return (
     <View style={styles.container}>
       <Text style={styles.text}>ĐĂNG KÝ</Text>
+
       <TextInput
         placeholder="nameUser"
         onChangeText={setnameUser}
         value={nameUser}
         style={styles.input}
       />
+
+
 
       <TextInput
         placeholder="Email"
@@ -72,6 +80,14 @@ const dangky = (props) => {
         secureTextEntry={true}
         style={styles.input}
       />
+      <TextInput
+        placeholder="Confirm Password"
+        onChangeText={setConfirmPassword}
+        value={confirmPassword}
+        secureTextEntry={true}
+        style={styles.input}
+      />
+       {error ? <Text style={styles.errorText}>{error}</Text> : null}
 
       <Pressable style={styles.button} onPress={() => onLogout()}>
         <Text style={styles.textButton}>ĐĂNG KÝ</Text>
