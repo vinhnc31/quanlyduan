@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { ScrollView, FlatList, View, Text, TextInput, StyleSheet,Image } from "react-native";
-import {API_URL, API_USER_BOOK } from "../../helper/Api";
+import {API_URL, API_BOOK } from "../../helper/Api";
 
 const  Home= (props) => {
   const navigation = props.navigation;
@@ -9,7 +9,7 @@ const  Home= (props) => {
   const [searchText, setSearchText] = useState("");
   
   const getProduct = () => {
-    fetch(API_USER_BOOK)
+    fetch(API_BOOK)
         .then(item => item.json())
         .then(data => {
            console.log(data);
@@ -49,7 +49,7 @@ const  Home= (props) => {
     return (
       <View style={styles.itemContainer2}>
           <Image source={{ uri: API_URL+'/'+item.image }} style={styles.itemImage2} />
-        <Text style={styles.itemName}>Name: {item.author}
+        <Text style={styles.itemName}>Name: {item.nameBook}
         </Text>
       </View>
     );
@@ -138,7 +138,7 @@ const styles = StyleSheet.create({
     width: 170,
     height: 100,
     marginTop: 10,
-    marginBottom: 10,
+    marginBottom: 2,
     borderRadius: 5,
   },
 
