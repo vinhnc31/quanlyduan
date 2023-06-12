@@ -5,10 +5,11 @@ import {
   TextInput,
   StyleSheet,
   TouchableOpacity,
-  CheckBox
+  CheckBox,
+  Alert,
 } from "react-native";
 import React, { useEffect, useState } from "react";
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import dangky from "../Dangky";
 import home from "../Home";
 import { API_USER_LOGIN } from "../../helper/Api";
@@ -27,36 +28,44 @@ const dangnhap = (props) => {
   const storageAutheInfo = async (value) => {
     try {
       const authInfo = JSON.stringify(value);
-      await AsyncStorage.setItem('authInfo', authInfo);
+      await AsyncStorage.setItem("authInfo", authInfo);
     } catch (error) {
       console.log(error);
     }
   };
 
   const onLogin = () => {
-    const data = {
-      email,
-      password,
+    if (checkValidateEmail === true) {
+      //Alert.alert("Thông Báo", "Email không đúng định dạng!", [{ text: "OK" }]);
+      return;
+    } else if (!email || !password) {
+      Alert.alert("Thông Báo", "Tài khoản và mật khẩu không được để trống !", [
+        { text: "OK" },
+      ]);
+      return;
+    } else {
+      const data = {
+        email,
+        password,
+      };
+      fetch(API_USER_LOGIN, {
+        method: "POST",
+        body: JSON.stringify(data),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }).then((response) => {
+          if (!response.ok) {
+            setError("Tài khoản không chính xác !");
+            return null;
+          } else {
+            //luu thong tin vao bo nho tạm
+            const request = { email, password };
+            storageAutheInfo(request);
+            navigation.navigate("Home");
+          }
+        }).catch((err) => console.log(err));
     }
-    fetch(API_USER_LOGIN, {
-      method: "POST",
-      body: JSON.stringify(data),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
-      .then((response) => {
-        if (!response.ok) {
-          setError("Tài khoản không chính xác !");
-        } else {
-          //luu thong tin vao bo nho tạm
-          const request = { email, password };
-          storageAutheInfo(request);
-          navigation.navigate("Home");
-        }
-      })
-      .catch((err) => console.log(err));
-
   };
   const handlerCheckEmail = (text) => {
     const reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
@@ -64,7 +73,9 @@ const dangnhap = (props) => {
     if (text.trim() === "") {
       setCheckValidateEmail(true);
     } else {
-      reg.test(text) ? setCheckValidateEmail(false) : setCheckValidateEmail(true);
+      reg.test(text)
+        ? setCheckValidateEmail(false)
+        : setCheckValidateEmail(true);
     }
   };
 
@@ -91,7 +102,7 @@ const dangnhap = (props) => {
         secureTextEntry={true}
         style={styles.input}
       />
-      
+
       <Pressable style={styles.button} onPress={() => onLogin()}>
         <Text style={styles.textButton}>Đăng Nhập</Text>
       </Pressable>
@@ -159,8 +170,8 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   viewRegister: {
-    marginTop: 20
-  }
+    marginTop: 20,
+  },
 });
 
 export default dangnhap;

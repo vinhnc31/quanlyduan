@@ -105,37 +105,46 @@ const doimk = (props) => {
   const navigateToAccount = () => {
     navigation.navigate("Dangnhap");
   };
+  const doLogout = () => {
+    AsyncStorage.removeItem('authInfo');
+    navigation.reset({
+        index: 0,
+        routes: [{name: 'Dangnhap'}]
+    });
+  };
 
   const handleSubmit = () => {
     validateOldPassword();
     validateNewPassword();
     validateConfirmPassword();
     if (!oldPasswordError && !newPasswordError && !confirmPasswordError) {
-      const id = idUser;
-      const password = newPassword;
-      console.log(id, password);
       fetch(API_UPDATE_USER, {
         method: "PUT",
-        body: JSON.stringify(id, password),
+        body: JSON.stringify({ id: idUser, password: newPassword }),
         headers: {
           "Content-Type": "application/json",
         },
       }).then((reponse) => {
+        console.log('reponse'+ JSON.stringify(reponse));
           if (!reponse.ok) {
             Alert.alert("Thông Báo", "Đổi mật khẩu thất bại !", [
                 { text: "OK"},
               ]);
           } else {
             Alert.alert("Thông Báo", "Mật khẩu đã được thay đổi thành công !", [
-              { text: "OK", onPress: () => navigateToAccount() },
+              { text: "OK", onPress: () => doLogout() },
             ]);
           }
         })
         .catch((err) => console.log(err));
     }
   };
+  const toBack = () => {
+    navigation.goBack();
+  };
   return (
     <View style={styles.container}>
+      <Text style={styles.textBack} onPress={() => {toBack()}}>Back</Text>
       <Text style={styles.text}>DỔI MẬT KHẨU</Text>
       <TextInput
         placeholder="Old password"
@@ -223,6 +232,15 @@ const styles = StyleSheet.create({
     marginTop: -80,
     textAlign: "center",
     fontWeight: "bold",
+  },
+  textBack: {
+    fontSize: 16,
+    marginBottom: 120,
+    marginLeft: 10,
+    marginTop: -120,
+    textAlign: "center",
+    fontWeight: "bold",
+    alignSelf: 'flex-start'
   },
 });
 export default doimk;
