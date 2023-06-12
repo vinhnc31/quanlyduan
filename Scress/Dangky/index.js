@@ -1,6 +1,6 @@
 import { Text, View, Pressable, TextInput, StyleSheet } from "react-native";
 import React, { useState } from "react";
-import { API_USE } from "../../helper/Api";
+import { API_USER_ADD } from "../../helper/Api";
 const dangky = (props) => {
   const navigation = props.navigation;
   const chuyenMh = (props) => {
@@ -9,10 +9,11 @@ const dangky = (props) => {
   const [nameUser, setnameUser] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState("");
+  const [repassword, setRepassword] = useState("");
   const [checkValidateName, setCheckValidateName] = useState(true);
   const [checkValidateEmail, setCheckValidateEmail] = useState(false);
+  const [checkValidatePwd, setCheckValidatePwd] = useState(false);
 
   const onLogout = () => {
     const data = {
@@ -20,10 +21,7 @@ const dangky = (props) => {
       email,
       password,
     }
-    if (password !== confirmPassword) {
-      setError("Mật khẩu không khớp");
-      return; // Ngừng thực hiện hành động đăng ký
-    }
+   2
 
     fetch('http://192.168.1.182:4000/User/addUser', {
       method: "POST",
@@ -41,24 +39,40 @@ const dangky = (props) => {
       })
       .catch((err) => console.log(err));
   };
+  const handlerCheckName = (text) => {
+    const name = text == '';
+    setnameUser(text);
+    !name ? setCheckValidateName(false) : setCheckValidateName(true);
+  };
 
   const handlerCheckEmail = (text) => {
     const reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
     setEmail(text);
     reg.test(text) ? setCheckValidateEmail(false) : setCheckValidateEmail(true);
   };
+  const handlerCheckPwd = (text) => {
+    const pwd = text === password;
+    checkValidatePwd(text);
+    pwd ? setCheckValidatePwd(false) : setCheckValidatePwd(true);
+  };
+
   return (
     <View style={styles.container}>
       <Text style={styles.text}>ĐĂNG KÝ</Text>
 
       <TextInput
         placeholder="nameUser"
-        onChangeText={setnameUser}
+        onChangeText={(text) => {
+          handlerCheckName(text);
+        }}
         value={nameUser}
         style={styles.input}
       />
-
-
+         {checkValidateName ? (
+        <Text style={styles.checkText}>Tên không được để trống !</Text>
+      ) : (
+        <Text></Text>
+      )}
 
       <TextInput
         placeholder="Email"
@@ -80,15 +94,16 @@ const dangky = (props) => {
         secureTextEntry={true}
         style={styles.input}
       />
-      <TextInput
-        placeholder="Confirm Password"
-        onChangeText={setConfirmPassword}
-        value={confirmPassword}
+     <TextInput
+        placeholder="Comfirm Password"
+        onChangeText={setRepassword}
+        value={repassword}
         secureTextEntry={true}
         style={styles.input}
+        
       />
-       {error ? <Text style={styles.errorText}>{error}</Text> : null}
-
+      
+     
       <Pressable style={styles.button} onPress={() => onLogout()}>
         <Text style={styles.textButton}>ĐĂNG KÝ</Text>
       </Pressable>

@@ -1,7 +1,7 @@
 import { StatusBar } from "expo-status-bar";
 import { NavigationContainer } from "@react-navigation/native";
 import { StyleSheet, Text, View, Image } from "react-native";
-
+import React, { useEffect } from 'react';
 import { createStackNavigator } from "@react-navigation/stack";
 
 const Stack = createStackNavigator();
@@ -11,8 +11,12 @@ import dangky from "./Scress/Dangky";
 import SplashScreen from "./Scress/Splash";
 import TabNaviagation from "./Scress/Tabnavigation";
 import doimk from "./Scress/doimatkhau";
-import SearchBook from "./Scress/searchBook";
+import { BackHandler, Alert } from 'react-native';
+import { useFocusEffect } from '@react-navigation/native';
+import chitiet from "./Scress/detail";
 const App = () => {
+
+
   return (
     <NavigationContainer>
       <Stack.Navigator initialRouteName="SplashScreen">
@@ -41,11 +45,13 @@ const App = () => {
           component={doimk}
           options={{ headerShown: false }}
         />
-        <Stack.Screen
-          name="SearchBook"
-          component={SearchBook}
+         <Stack.Screen
+          name="detail"
+          component={chitiet}
           options={{ headerShown: false }}
         />
+       
+       
       </Stack.Navigator>
     </NavigationContainer>
   );
