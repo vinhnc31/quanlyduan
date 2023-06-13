@@ -56,7 +56,9 @@ const dangnhap = (props) => {
         },
       }).then((response) => {
           if (!response.ok) {
-            setError("Tài khoản không chính xác !");
+            Alert.alert("Thông Báo", "Tài khoản hoặc mật khẩu không chính sác !", [
+              { text: "OK" },
+            ]);
             return null;
           } else {
             //luu thong tin vao bo nho tạm
@@ -171,6 +173,11 @@ const styles = StyleSheet.create({
   },
   viewRegister: {
     marginTop: 20,
+  },
+  checkText: {
+    marginLeft: 20,
+    fontSize: 16,
+    color: "red",
   },
 });
 

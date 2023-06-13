@@ -32,7 +32,6 @@ const  Home= (props) => {
   //   setFilteredData(filteredResult);
   // }, [searchText, data]);
 
-
   const renderItem = ({ item }) => {
     
     return (
@@ -56,6 +55,7 @@ const  Home= (props) => {
   };
   return (
     <ScrollView>
+      
       <View style={styles.searchContainer}>
         <TextInput
           style={styles.searchInput}

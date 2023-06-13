@@ -11,6 +11,7 @@ import dangky from "./Scress/Dangky";
 import SplashScreen from "./Scress/Splash";
 import TabNaviagation from "./Scress/Tabnavigation";
 import doimk from "./Scress/doimatkhau";
+import readBook from "./Scress/ReadBook";
 const App = () => {
   return (
     <NavigationContainer>
@@ -38,6 +39,11 @@ const App = () => {
         <Stack.Screen
           name="doimk"
           component={doimk}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="ReadBook"
+          component={readBook}
           options={{ headerShown: false }}
         />
       </Stack.Navigator>
