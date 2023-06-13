@@ -32,6 +32,7 @@ const  Home= (props) => {
   //   setFilteredData(filteredResult);
   // }, [searchText, data]);
 
+  
   const renderItem = ({ item }) => {
     
     return (
