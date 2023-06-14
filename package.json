@@ -8,12 +8,15 @@
     "ios": "expo start --ios",
     "web": "expo start --web"
   },
+
   "dependencies": {
     "@react-native-async-storage/async-storage": "^1.18.1",
     "@react-navigation/bottom-tabs": "^6.5.7",
     "@react-navigation/native": "^6.1.6",
     "@react-navigation/native-stack": "^6.9.12",
     "@react-navigation/stack": "^6.3.16",
+    "@react-native-community/masked-view": "^0.1.7",
+    "@react-navigation/material-bottom-tabs": "^5.1.7",
     "expo": "~48.0.15",
     "expo-status-bar": "~1.4.4",
     "filter-data": "^0.3.1",

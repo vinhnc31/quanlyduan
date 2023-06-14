@@ -18,11 +18,11 @@ const chitiet = ({route,navigation}) => {
     <View style={styles.container}>
   
       {/* <Image style={{ width: 230, height: 230, margin: 20, marginLeft: 70 }} source={{ uri: 'http:192.168.0.102:4444/' + item_sp.image }}/> */}
-      <Image style={{ width: 230, height: 230, margin: 20, marginLeft: 70 }} source={{ uri: API_URL+ '/' + item_sp.image }} />
+      <Image style={{ width: 230, height: 230, margin: 20, alignSelf: 'center' }} source={{ uri: API_URL+ '/' + item_sp.image }} />
      
       <View style={{ marginLeft: 30 }}>
-        <Text style={styles.texthihi}> {item_sp.nameBook}</Text>
-         <Text style={styles.texthihi}> Tác giả: <Text style={{fontWeight:"normal"}}>{item_sp.author} </Text> </Text>  
+        <Text style={styles.texthihi}>{item_sp.nameBook}</Text>
+         <Text style={styles.texthihi}>Tác giả: <Text style={{fontWeight:"normal"}}>{item_sp.author} </Text> </Text>  
        
         <Text style={styles.texthihi}>Ngày xuất bản:  <Text style={{fontWeight:"normal"}}>{item_sp.date} </Text></Text>
       </View>
@@ -61,10 +61,11 @@ const styles = StyleSheet.create({
   texthihi: {
     fontSize: 20,
     margin: 3,
-    fontWeight: '600'
+    fontWeight: '600',
+    marginLeft: 40,
   },
   buttonhihi: {
-    width: 100,
+    width: 130,
     height: 28,
     backgroundColor: '#62CDFF',
     borderRadius: 10,
@@ -72,7 +73,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     borderColor: 'black',
     borderWidth: 0.8,
-    marginLeft: 20
+    marginLeft: 28
   },
   buttonhihi1: {
     width: 150,
@@ -83,7 +84,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     borderColor: 'black',
     borderWidth: 0.8,
-    marginLeft: 60,
+    marginLeft: 80,
 
   }
 });

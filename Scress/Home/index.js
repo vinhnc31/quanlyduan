@@ -65,7 +65,7 @@ const Home = (props) => {
         <TouchableOpacity onPress={() => { navigation.navigate('detail', { item_sp: item }) }}>
           <View style={{ borderWidth: 1, alignItems: "center", height: 170,width:130, paddingTop: 7 }}>
             <Image source={{ uri: API_URL +'/' + item.image }} style={styles.itemImage2} />
-            <Text style={styles.itemName}>{item.nameBook} </Text>
+            <Text style={styles.itemName} numberOfLines={1}>{item.nameBook} </Text>
           </View>
         </TouchableOpacity>
       </View>
@@ -150,6 +150,7 @@ const styles = StyleSheet.create({
   },
   itemName: {
     fontSize: 14,
+    marginHorizontal: 2,
   },
   searchContainer: {
     padding: 10,
@@ -198,7 +199,8 @@ const styles = StyleSheet.create({
   searchIcon: {
     position: 'absolute',
     top: 10,
-    left: 280,
+    alignSelf: 'flex-end',
+    right: 20,
   },
 });
 

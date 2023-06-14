@@ -6,7 +6,7 @@ const Favourite = (props) => {
 
   return (
     <View style={styles.container}>
-      <Text>Man hinh Account</Text>
+      <Text>Man hinh Account 32222</Text>
     </View>
   );
 };
