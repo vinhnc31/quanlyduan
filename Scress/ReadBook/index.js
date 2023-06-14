@@ -12,18 +12,24 @@ const readBook = (props) => {
   const [data, setData] = useState("");
   const [loading, setLoading] = useState(true);
   const [index, setIndex] = useState(0);
-
   let newIndex = 0;
 
+  const [disableButton, setDisableButton] = useState(false);
+
   const getChapter = async () => {
+    setDisableButton(true); // disable các nút bấm
     await fetch(`${API_PRODUCT}/${idchapter}/detailChapterApi`)
       .then((item) => item.json())
       .then((data) => {
-        console.log("List Chapter ------" + JSON.stringify(data));
+        //set list chapter
         setData(data);
         setLoading(false);
+        setDisableButton(false);
       })
-      .catch((err) => console.log("loi: " + err));
+      .catch((err) => {
+        console.log("loi: " + err);
+        setDisableButton(false);
+      });
   };
 
   useEffect(() => {
@@ -31,27 +37,28 @@ const readBook = (props) => {
   }, []);
 
   const handlePrevChapter = () => {
-    newIndex = index - 1;
-    if (newIndex >= 0) {
-      setIndex(newIndex);
-      setIdChapter(Item.chapter[newIndex]);
-      getChapter();
-    } else {
-      // đã đến đầu truyện, hiển thị thông báo hoặc chuyển qua trang khác
-      console.log("Đã đến đầu truyện!");
+    if (!disableButton) {
+      newIndex = index - 1;
+      if (newIndex >= 0) {
+        setIndex(newIndex);
+        setIdChapter(Item.chapter[newIndex]);
+        getChapter();
+      } else {
+        console.log("Đã đến đầu truyện!");
+      }
     }
   };
 
   const handleNextChapter = () => {
-    newIndex = index + 1;
-    if (newIndex < Item.chapter.length) {
-      setIndex(newIndex);
-      setIdChapter(Item.chapter[newIndex]);
-      getChapter();
-      console.log("----"+ index);
-    } else {
-      // truyện đã hết, hiển thị thông báo hoặc chuyển qua truyện khác
-      console.log("Truyện đã hết!");
+    if (!disableButton) {
+      newIndex = newIndex + 1;
+      if (newIndex < Item.chapter.length) {
+        setIndex(newIndex);
+        setIdChapter(Item.chapter[newIndex]);
+        getChapter();
+      } else {
+        console.log("Truyện đã hết!");
+      }
     }
   };
 
