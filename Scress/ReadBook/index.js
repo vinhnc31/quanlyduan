@@ -1,161 +1,81 @@
 import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { useRoute } from "@react-navigation/native";
+import { API_PRODUCT } from "../../helper/Api";
 
 const readBook = (props) => {
   const navigation = props.navigation;
+  const route = useRoute();
+  const { Item } = route.params;
+
+  const [idchapter, setIdChapter] = useState(Item.chapter[0]);
+  const [data, setData] = useState("");
+  const [loading, setLoading] = useState(true);
+  const [index, setIndex] = useState(0);
+
+  let newIndex = 0;
+
+  const getChapter = async () => {
+    await fetch(`${API_PRODUCT}/${idchapter}/detailChapterApi`)
+      .then((item) => item.json())
+      .then((data) => {
+        console.log("List Chapter ------" + JSON.stringify(data));
+        setData(data);
+        setLoading(false);
+      })
+      .catch((err) => console.log("loi: " + err));
+  };
+
+  useEffect(() => {
+    getChapter();
+  }, []);
+
+  const handlePrevChapter = () => {
+    newIndex = index - 1;
+    if (newIndex >= 0) {
+      setIndex(newIndex);
+      setIdChapter(Item.chapter[newIndex]);
+      getChapter();
+    } else {
+      // đã đến đầu truyện, hiển thị thông báo hoặc chuyển qua trang khác
+      console.log("Đã đến đầu truyện!");
+    }
+  };
+
+  const handleNextChapter = () => {
+    newIndex = index + 1;
+    if (newIndex < Item.chapter.length) {
+      setIndex(newIndex);
+      setIdChapter(Item.chapter[newIndex]);
+      getChapter();
+      console.log("----"+ index);
+    } else {
+      // truyện đã hết, hiển thị thông báo hoặc chuyển qua truyện khác
+      console.log("Truyện đã hết!");
+    }
+  };
+
   return (
     <View style={styles.container}>
-      <ScrollView>
-      <Text style={styles.txtnameBook}>Địa Phủ Đế Vương</Text>
-      <Text style={styles.txtchuong}>Chương 1 </Text>
-      <View style={styles.txtButton}>
-        <Pressable>
-          <Text style={styles.txtButton1}>Trước</Text>
-        </Pressable>
-        <Pressable>
-          <Text style={styles.txtButton2}>Sau</Text>
-        </Pressable>
-      </View>
-      
-        <Text style={styles.txtContent}>
-          Lý Thành Thiên cảm giác cải lưng thật lạnh, nhân châu khẽ động, có
-          chút khó khăn lật mí mắt. "Ồ, không khí dễ chịu!" "Quát đò heo, đây là
-          dấu nha?". “Thôi thôi thôi lại nữa, ta tiếp tục xuyên rồi!" Lúc này Lý
-          Thành Thiên la lối om sòm, ngồi bật dậy, nhận ra mình vậy mà nằm ngay
-          giữa đại lộ. Chính xác đại lộ là từ đá khối mà thành, cũng không biết
-          đến từ chất liệu gì lại đặc biệt lạnh như vậy, Lý Thành Thiên vỏ đầu,
-          nghĩ tới chất liệu làm gì nha, tại sao hắn ở đây, hơn nữa nằm ngay
-          đường xã không sợ xe tông chết sao. Hắn mới ý thức lại hai bên đưởng,
-          toàn là nhà kiểu xưa, còn treo đèn lồng, rốt cuộc đã xuyên tới thế
-          giới nào rồi. Trông không giống sẽ có xe tông. Đứng dậy khởi động gân
-          cốt. Lý Thành Thiên ngẩng đầu nhìn trời, bị doạ kém chút ngất đi, trên
-          trời cũng không giống cái chỗ kia. Từng tầng mây đen cuộn lại tạo
-          thành những vòng xoáy khủng bố trên trời, như là cõi yêu ma tác quái,
-          con người đều không sống nổi. Không đúng, vửa rồi Lý Thành Thiên còn
-          gặp mấy tiên nhân đầu. Trước đó hẳn là người Địa Cầu, một quỷ nghèo đi
-          cua gái, còn là hoa khôi trường người ta. Kết quả bị từ chối, hắn kiên
-          trì đi tới, nào ngờ nữ sinh kia có chút quả phận, đẩy hắn một cái.
-          Lý Thành Thiên cảm giác cải lưng thật lạnh, nhân châu khẽ động, có
-          chút khó khăn lật mí mắt. "Ồ, không khí dễ chịu!" "Quát đò heo, đây là
-          dấu nha?". “Thôi thôi thôi lại nữa, ta tiếp tục xuyên rồi!" Lúc này Lý
-          Thành Thiên la lối om sòm, ngồi bật dậy, nhận ra mình vậy mà nằm ngay
-          giữa đại lộ. Chính xác đại lộ là từ đá khối mà thành, cũng không biết
-          đến từ chất liệu gì lại đặc biệt lạnh như vậy, Lý Thành Thiên vỏ đầu,
-          nghĩ tới chất liệu làm gì nha, tại sao hắn ở đây, hơn nữa nằm ngay
-          đường xã không sợ xe tông chết sao. Hắn mới ý thức lại hai bên đưởng,
-          toàn là nhà kiểu xưa, còn treo đèn lồng, rốt cuộc đã xuyên tới thế
-          giới nào rồi. Trông không giống sẽ có xe tông. Đứng dậy khởi động gân
-          cốt. Lý Thành Thiên ngẩng đầu nhìn trời, bị doạ kém chút ngất đi, trên
-          trời cũng không giống cái chỗ kia. Từng tầng mây đen cuộn lại tạo
-          thành những vòng xoáy khủng bố trên trời, như là cõi yêu ma tác quái,
-          con người đều không sống nổi. Không đúng, vửa rồi Lý Thành Thiên còn
-          gặp mấy tiên nhân đầu. Trước đó hẳn là người Địa Cầu, một quỷ nghèo đi
-          cua gái, còn là hoa khôi trường người ta. Kết quả bị từ chối, hắn kiên
-          trì đi tới, nào ngờ nữ sinh kia có chút quả phận, đẩy hắn một cái.
-          Lý Thành Thiên cảm giác cải lưng thật lạnh, nhân châu khẽ động, có
-          chút khó khăn lật mí mắt. "Ồ, không khí dễ chịu!" "Quát đò heo, đây là
-          dấu nha?". “Thôi thôi thôi lại nữa, ta tiếp tục xuyên rồi!" Lúc này Lý
-          Thành Thiên la lối om sòm, ngồi bật dậy, nhận ra mình vậy mà nằm ngay
-          giữa đại lộ. Chính xác đại lộ là từ đá khối mà thành, cũng không biết
-          đến từ chất liệu gì lại đặc biệt lạnh như vậy, Lý Thành Thiên vỏ đầu,
-          nghĩ tới chất liệu làm gì nha, tại sao hắn ở đây, hơn nữa nằm ngay
-          đường xã không sợ xe tông chết sao. Hắn mới ý thức lại hai bên đưởng,
-          toàn là nhà kiểu xưa, còn treo đèn lồng, rốt cuộc đã xuyên tới thế
-          giới nào rồi. Trông không giống sẽ có xe tông. Đứng dậy khởi động gân
-          cốt. Lý Thành Thiên ngẩng đầu nhìn trời, bị doạ kém chút ngất đi, trên
-          trời cũng không giống cái chỗ kia. Từng tầng mây đen cuộn lại tạo
-          thành những vòng xoáy khủng bố trên trời, như là cõi yêu ma tác quái,
-          con người đều không sống nổi. Không đúng, vửa rồi Lý Thành Thiên còn
-          gặp mấy tiên nhân đầu. Trước đó hẳn là người Địa Cầu, một quỷ nghèo đi
-          cua gái, còn là hoa khôi trường người ta. Kết quả bị từ chối, hắn kiên
-          trì đi tới, nào ngờ nữ sinh kia có chút quả phận, đẩy hắn một cái.
-          Lý Thành Thiên cảm giác cải lưng thật lạnh, nhân châu khẽ động, có
-          chút khó khăn lật mí mắt. "Ồ, không khí dễ chịu!" "Quát đò heo, đây là
-          dấu nha?". “Thôi thôi thôi lại nữa, ta tiếp tục xuyên rồi!" Lúc này Lý
-          Thành Thiên la lối om sòm, ngồi bật dậy, nhận ra mình vậy mà nằm ngay
-          giữa đại lộ. Chính xác đại lộ là từ đá khối mà thành, cũng không biết
-          đến từ chất liệu gì lại đặc biệt lạnh như vậy, Lý Thành Thiên vỏ đầu,
-          nghĩ tới chất liệu làm gì nha, tại sao hắn ở đây, hơn nữa nằm ngay
-          đường xã không sợ xe tông chết sao. Hắn mới ý thức lại hai bên đưởng,
-          toàn là nhà kiểu xưa, còn treo đèn lồng, rốt cuộc đã xuyên tới thế
-          giới nào rồi. Trông không giống sẽ có xe tông. Đứng dậy khởi động gân
-          cốt. Lý Thành Thiên ngẩng đầu nhìn trời, bị doạ kém chút ngất đi, trên
-          trời cũng không giống cái chỗ kia. Từng tầng mây đen cuộn lại tạo
-          thành những vòng xoáy khủng bố trên trời, như là cõi yêu ma tác quái,
-          con người đều không sống nổi. Không đúng, vửa rồi Lý Thành Thiên còn
-          gặp mấy tiên nhân đầu. Trước đó hẳn là người Địa Cầu, một quỷ nghèo đi
-          cua gái, còn là hoa khôi trường người ta. Kết quả bị từ chối, hắn kiên
-          trì đi tới, nào ngờ nữ sinh kia có chút quả phận, đẩy hắn một cái.
-          Lý Thành Thiên cảm giác cải lưng thật lạnh, nhân châu khẽ động, có
-          chút khó khăn lật mí mắt. "Ồ, không khí dễ chịu!" "Quát đò heo, đây là
-          dấu nha?". “Thôi thôi thôi lại nữa, ta tiếp tục xuyên rồi!" Lúc này Lý
-          Thành Thiên la lối om sòm, ngồi bật dậy, nhận ra mình vậy mà nằm ngay
-          giữa đại lộ. Chính xác đại lộ là từ đá khối mà thành, cũng không biết
-          đến từ chất liệu gì lại đặc biệt lạnh như vậy, Lý Thành Thiên vỏ đầu,
-          nghĩ tới chất liệu làm gì nha, tại sao hắn ở đây, hơn nữa nằm ngay
-          đường xã không sợ xe tông chết sao. Hắn mới ý thức lại hai bên đưởng,
-          toàn là nhà kiểu xưa, còn treo đèn lồng, rốt cuộc đã xuyên tới thế
-          giới nào rồi. Trông không giống sẽ có xe tông. Đứng dậy khởi động gân
-          cốt. Lý Thành Thiên ngẩng đầu nhìn trời, bị doạ kém chút ngất đi, trên
-          trời cũng không giống cái chỗ kia. Từng tầng mây đen cuộn lại tạo
-          thành những vòng xoáy khủng bố trên trời, như là cõi yêu ma tác quái,
-          con người đều không sống nổi. Không đúng, vửa rồi Lý Thành Thiên còn
-          gặp mấy tiên nhân đầu. Trước đó hẳn là người Địa Cầu, một quỷ nghèo đi
-          cua gái, còn là hoa khôi trường người ta. Kết quả bị từ chối, hắn kiên
-          trì đi tới, nào ngờ nữ sinh kia có chút quả phận, đẩy hắn một cái.
-          Lý Thành Thiên cảm giác cải lưng thật lạnh, nhân châu khẽ động, có
-          chút khó khăn lật mí mắt. "Ồ, không khí dễ chịu!" "Quát đò heo, đây là
-          dấu nha?". “Thôi thôi thôi lại nữa, ta tiếp tục xuyên rồi!" Lúc này Lý
-          Thành Thiên la lối om sòm, ngồi bật dậy, nhận ra mình vậy mà nằm ngay
-          giữa đại lộ. Chính xác đại lộ là từ đá khối mà thành, cũng không biết
-          đến từ chất liệu gì lại đặc biệt lạnh như vậy, Lý Thành Thiên vỏ đầu,
-          nghĩ tới chất liệu làm gì nha, tại sao hắn ở đây, hơn nữa nằm ngay
-          đường xã không sợ xe tông chết sao. Hắn mới ý thức lại hai bên đưởng,
-          toàn là nhà kiểu xưa, còn treo đèn lồng, rốt cuộc đã xuyên tới thế
-          giới nào rồi. Trông không giống sẽ có xe tông. Đứng dậy khởi động gân
-          cốt. Lý Thành Thiên ngẩng đầu nhìn trời, bị doạ kém chút ngất đi, trên
-          trời cũng không giống cái chỗ kia. Từng tầng mây đen cuộn lại tạo
-          thành những vòng xoáy khủng bố trên trời, như là cõi yêu ma tác quái,
-          con người đều không sống nổi. Không đúng, vửa rồi Lý Thành Thiên còn
-          gặp mấy tiên nhân đầu. Trước đó hẳn là người Địa Cầu, một quỷ nghèo đi
-          cua gái, còn là hoa khôi trường người ta. Kết quả bị từ chối, hắn kiên
-          trì đi tới, nào ngờ nữ sinh kia có chút quả phận, đẩy hắn một cái.
-          Lý Thành Thiên cảm giác cải lưng thật lạnh, nhân châu khẽ động, có
-          chút khó khăn lật mí mắt. "Ồ, không khí dễ chịu!" "Quát đò heo, đây là
-          dấu nha?". “Thôi thôi thôi lại nữa, ta tiếp tục xuyên rồi!" Lúc này Lý
-          Thành Thiên la lối om sòm, ngồi bật dậy, nhận ra mình vậy mà nằm ngay
-          giữa đại lộ. Chính xác đại lộ là từ đá khối mà thành, cũng không biết
-          đến từ chất liệu gì lại đặc biệt lạnh như vậy, Lý Thành Thiên vỏ đầu,
-          nghĩ tới chất liệu làm gì nha, tại sao hắn ở đây, hơn nữa nằm ngay
-          đường xã không sợ xe tông chết sao. Hắn mới ý thức lại hai bên đưởng,
-          toàn là nhà kiểu xưa, còn treo đèn lồng, rốt cuộc đã xuyên tới thế
-          giới nào rồi. Trông không giống sẽ có xe tông. Đứng dậy khởi động gân
-          cốt. Lý Thành Thiên ngẩng đầu nhìn trời, bị doạ kém chút ngất đi, trên
-          trời cũng không giống cái chỗ kia. Từng tầng mây đen cuộn lại tạo
-          thành những vòng xoáy khủng bố trên trời, như là cõi yêu ma tác quái,
-          con người đều không sống nổi. Không đúng, vửa rồi Lý Thành Thiên còn
-          gặp mấy tiên nhân đầu. Trước đó hẳn là người Địa Cầu, một quỷ nghèo đi
-          cua gái, còn là hoa khôi trường người ta. Kết quả bị từ chối, hắn kiên
-          trì đi tới, nào ngờ nữ sinh kia có chút quả phận, đẩy hắn một cái.
-          Lý Thành Thiên cảm giác cải lưng thật lạnh, nhân châu khẽ động, có
-          chút khó khăn lật mí mắt. "Ồ, không khí dễ chịu!" "Quát đò heo, đây là
-          dấu nha?". “Thôi thôi thôi lại nữa, ta tiếp tục xuyên rồi!" Lúc này Lý
-          Thành Thiên la lối om sòm, ngồi bật dậy, nhận ra mình vậy mà nằm ngay
-          giữa đại lộ. Chính xác đại lộ là từ đá khối mà thành, cũng không biết
-          đến từ chất liệu gì lại đặc biệt lạnh như vậy, Lý Thành Thiên vỏ đầu,
-          nghĩ tới chất liệu làm gì nha, tại sao hắn ở đây, hơn nữa nằm ngay
-          đường xã không sợ xe tông chết sao. Hắn mới ý thức lại hai bên đưởng,
-          toàn là nhà kiểu xưa, còn treo đèn lồng, rốt cuộc đã xuyên tới thế
-          giới nào rồi. Trông không giống sẽ có xe tông. Đứng dậy khởi động gân
-          cốt. Lý Thành Thiên ngẩng đầu nhìn trời, bị doạ kém chút ngất đi, trên
-          trời cũng không giống cái chỗ kia. Từng tầng mây đen cuộn lại tạo
-          thành những vòng xoáy khủng bố trên trời, như là cõi yêu ma tác quái,
-          con người đều không sống nổi. Không đúng, vửa rồi Lý Thành Thiên còn
-          gặp mấy tiên nhân đầu. Trước đó hẳn là người Địa Cầu, một quỷ nghèo đi
-          cua gái, còn là hoa khôi trường người ta. Kết quả bị từ chối, hắn kiên
-          trì đi tới, nào ngờ nữ sinh kia có chút quả phận, đẩy hắn một cái.
-        </Text>
-      </ScrollView>
+      {loading ? (
+        <Text>Loading...</Text>
+      ) : (
+        <View>
+          <Text style={styles.txtnameBook}>{Item.nameBook}</Text>
+          <Text style={styles.txtchuong}>{data.chapter.nameChapter}</Text>
+          <View style={styles.txtButton}>
+            <Pressable onPress={handlePrevChapter}>
+              <Text style={styles.txtButton1}>Trước</Text>
+            </Pressable>
+            <Pressable onPress={handleNextChapter}>
+              <Text style={styles.txtButton2}>Sau</Text>
+            </Pressable>
+          </View>
+          <ScrollView>
+            <Text style={styles.txtContent}>{data.chapter.contentChapter}</Text>
+          </ScrollView>
+        </View>
+      )}
     </View>
   );
 };
@@ -170,48 +90,46 @@ const styles = StyleSheet.create({
   txtnameBook: {
     marginTop: 23,
     fontSize: 24,
-    fontWeight: "600", 
-    alignSelf: 'center',
+    fontWeight: "600",
+    alignSelf: "center",
   },
-  txtchuong:{
+  txtchuong: {
     fontSize: 20,
     fontWeight: "bold",
-    textAlign: 'left',
+    textAlign: "left",
     marginLeft: 10,
     marginTop: 14,
   },
   txtButton: {
-    flexDirection: 'row',
+    flexDirection: "row",
   },
   txtButton1: {
-    backgroundColor: '#62CDFF',
+    backgroundColor: "#62CDFF",
     width: 169,
-    height:35,
-    textAlign: 'center',
-    textAlignVertical: 'center',
+    height: 35,
+    textAlign: "center",
+    textAlignVertical: "center",
     fontSize: 20,
-    fontWeight: '600',
+    fontWeight: "600",
     borderRadius: 10,
     marginLeft: 10,
     marginTop: 44,
     marginBottom: 44,
   },
   txtButton2: {
-    backgroundColor: '#62CDFF',
+    backgroundColor: "#62CDFF",
     width: 169,
-    height:35,
-    textAlign: 'center',
-    textAlignVertical: 'center',
+    height: 35,
+    textAlign: "center",
+    textAlignVertical: "center",
     fontSize: 20,
-    fontWeight: '600',
+    fontWeight: "600",
     borderRadius: 10,
     marginLeft: 35,
     marginTop: 44,
     marginBottom: 44,
-    
   },
   txtContent: {
     padding: 10,
   },
-
 });

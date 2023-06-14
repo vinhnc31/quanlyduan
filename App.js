@@ -12,6 +12,7 @@ import SplashScreen from "./Scress/Splash";
 import TabNaviagation from "./Scress/Tabnavigation";
 import doimk from "./Scress/doimatkhau";
 import readBook from "./Scress/ReadBook";
+import chitiet from "./Scress/detail";
 const App = () => {
   return (
     <NavigationContainer>
@@ -39,6 +40,11 @@ const App = () => {
         <Stack.Screen
           name="doimk"
           component={doimk}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="detail"
+          component={chitiet}
           options={{ headerShown: false }}
         />
         <Stack.Screen
