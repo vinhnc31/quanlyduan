@@ -62,6 +62,7 @@ const Home = (props) => {
   };
 
 
+  console.log(filteredData)
   const renderItemProduct = ({ item }) => {
 
     return (
@@ -109,7 +110,6 @@ const Home = (props) => {
       <View style={styles.text}>
         <Text style={styles.text}>Danh sách</Text>
         <FlatList
-          
           data={filteredData}
           numColumns={2}
           keyExtractor={(item) => item.id && item.id.toString()}
@@ -117,7 +117,6 @@ const Home = (props) => {
            <View style={styles.itemContainer2 }>
             <Image source={{ uri: API_URL +'/' + item.image }} style={styles.itemImage2} />
             <Text style={styles.itemName}>{item.nameBook} </Text>
-         
        
       </View>
        

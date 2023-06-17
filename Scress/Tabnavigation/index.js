@@ -7,6 +7,7 @@ import { useFocusEffect } from '@react-navigation/native';
 import home from "../Home";
 import Account from "../Account";
 import Favourite from "../Favourite";
+import SearchBook from "../searchBook";
 
 const Tab = createBottomTabNavigator();
 
@@ -56,7 +57,7 @@ const TabNaviagation = (props) => {
       
     >
       <Tab.Screen name="home" component={home} options={{headerShown: true}} />  
-      <Tab.Screen name="Favorite" component={Favourite}  options={{headerShown: false}}/>
+      <Tab.Screen name="Tủ sách" component={Favourite}  options={{headerShown: true}}/>
       <Tab.Screen name="Account" component={Account}  options={{headerShown: false}}/>
     </Tab.Navigator>
   );

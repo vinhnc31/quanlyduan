@@ -1,16 +1,36 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, FlatList, StyleSheet, Button } from 'react-native';
+import { View, Text, FlatList, StyleSheet,Button,Image } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
+import { API_BOOK,API_URL } from "../../helper/Api";
 const FavouriteScreen = ({ route }) => {
-  const { item_sp } = route.params;
+  const { item_sp } = route.params || {};
   const [favouriteItems, setFavouriteItems] = useState([]);
   const [hasData, setHasData] = useState(false);
 
-
   useEffect(() => {
-    loadFavouriteItems();
+    saveFavouriteItems(); // Save the item automatically when component mounts
   }, []);
+
+  const saveFavouriteItems = async () => {
+    try {
+      const storedFavouriteItems = await AsyncStorage.getItem('dataFa');
+      if (storedFavouriteItems) {
+        const parsedItems = JSON.parse(storedFavouriteItems);
+        const updatedItems = [...parsedItems, item_sp];
+        await AsyncStorage.setItem('dataFa', JSON.stringify(updatedItems));
+        console.log('Dữ liệu đã được lưu vào AsyncStorage');
+        setFavouriteItems(updatedItems);
+        setHasData(true);
+      } else {
+        await AsyncStorage.setItem('dataFa', JSON.stringify([item_sp]));
+        console.log('Dữ liệu đã được lưu vào AsyncStorage');
+        setFavouriteItems([item_sp]);
+        setHasData(true);
+      }
+    } catch (error) {
+      console.error('Lỗi khi lưu dữ liệu vào AsyncStorage:', error);
+    }
+  };
 
   const loadFavouriteItems = async () => {
     try {
@@ -27,83 +47,99 @@ const FavouriteScreen = ({ route }) => {
       console.error('Lỗi khi tải dữ liệu từ AsyncStorage:', error);
     }
   };
-  
-
-  const saveFavouriteItems = async () => {
+  const removeFavouriteItem = async (item) => {
     try {
-      const storedFavouriteItems = await AsyncStorage.getItem('dataFa');
-      if (storedFavouriteItems) {
-        const parsedItems = JSON.parse(storedFavouriteItems);
-        const updatedItems = [...parsedItems, item_sp];
-        await AsyncStorage.setItem('dataFa', JSON.stringify(updatedItems));
-        console.log('Dữ liệu đã được lưu vào AsyncStorage');
-      } else {
-        await AsyncStorage.setItem('dataFa', JSON.stringify([item_sp]));
-        console.log('Dữ liệu đã được lưu vào AsyncStorage');
-      }
+      const updatedItems = favouriteItems.filter(
+        (favItem) => favItem !== item
+      );
+      await AsyncStorage.setItem('dataFa', JSON.stringify(updatedItems));
+      setFavouriteItems(updatedItems);
+      console.log('Dữ liệu đã được cập nhật trong AsyncStorage');
     } catch (error) {
-      console.error('Lỗi khi lưu dữ liệu vào AsyncStorage:', error);
+      console.error('Lỗi khi xóa dữ liệu từ AsyncStorage:', error);
     }
   };
 
   const renderItem = ({ item }) => {
-    return (
-      <View style={styles.item}>
-        <Text style={styles.itemName}>{item && item.nameBook}</Text>
-      </View>
-    );
+    if (item && item.image) {
+      return (
+        <View style={styles.item}>
+          <View style={styles.itemContent}>
+            <Image source={{ uri: API_URL + '/' + item.image }} style={styles.itemImage} />
+            <View style={styles.itemTextContainer}>
+              <Text style={styles.itemName}>{item.nameBook}</Text>
+              <Text style={styles.itemGenre}>{item.genre}</Text>
+            </View>
+            
+          </View>
+          <Button
+            title="Xóa"
+            onPress={() => removeFavouriteItem(item)}
+            color="red"
+          />
+        </View>
+      );
+    } else {
+      return null;
+    }
   };
-  console.log(favouriteItems)
+  
+  
+
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Danh sách yêu thích</Text>
       {hasData ? (
-      
-
-        
-      <View>
-      <FlatList
-        data={favouriteItems}
-        renderItem={renderItem}
-        keyExtractor={(item, index) => index.toString()}
-      />
-     
-    </View>
+        <FlatList
+          data={favouriteItems}
+          renderItem={renderItem}
+          keyExtractor={(item, index) => index.toString()}
+        />
       ) : (
         <Text style={styles.noDataText}>Không có dữ liệu</Text>
       )}
-      <Button title="Thêm vào yêu thích" onPress={saveFavouriteItems} />
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 16,
-    backgroundColor: '#fff',
-  },
-  title: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    marginBottom: 16,
-  },
   item: {
+    flexDirection: 'row',
+    alignItems: 'center',
     marginBottom: 8,
+    borderRadius: 5,
+    borderWidth: 1,
+    borderColor: 'gray',
+    padding: 8,
+  },
+  itemContent: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    flex: 1,
+  },
+  itemImage: {
+    width: 100,
+    height: 130,
+    marginRight: 8,
+    borderRadius: 5,
+  },
+  itemTextContainer: {
+    flex: 1,
+  },
+  itemGenre: {
+    fontSize: 14,
+    color: 'gray',
+    marginTop:50,
+    alignSelf: 'center',
+    marginBottom: 4,
   },
   itemName: {
     fontSize: 16,
+    alignSelf: 'center',
+   
     fontWeight: 'bold',
   },
-  itemAuthor: {
-    fontSize: 14,
-    color: 'gray',
-  },
-  noDataText: {
-    fontSize: 16,
-    textAlign: 'center',
-    marginTop: 20,
-  },
 });
+
+
 
 export default FavouriteScreen;

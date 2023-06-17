@@ -16,6 +16,7 @@ import { useFocusEffect } from '@react-navigation/native';
 import chitiet from "./Scress/detail";
 import SearchBook from "./Scress/searchBook";
 import favourite from "./Scress/Favourite";
+import readBook from "./Scress/ReadBook";
 
 
 const App = () => {
@@ -65,11 +66,11 @@ const App = () => {
           component={favourite}
           options={{ headerShown: false }}
         />
-        {/* <Stack.Screen
+        <Stack.Screen
           name="ReadBook"
           component={readBook}
           options={{ headerShown: false }}
-        /> */}
+        />
 
 
       </Stack.Navigator>
