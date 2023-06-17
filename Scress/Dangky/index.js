@@ -23,7 +23,7 @@ const dangky = (props) => {
     }
    2
 
-    fetch('http://192.168.1.182:4000/User/addUser', {
+    fetch(API_USER_ADD, {
       method: "POST",
       body: JSON.stringify(data),
       headers: {
@@ -139,7 +139,7 @@ const styles = StyleSheet.create({
     width: 150,
     height: 50,
     borderWidth: 2,
-    marginTop: 50,
+    marginTop: 60,
     backgroundColor: "#fff",
     borderRadius: 10,
     alignSelf: "center",

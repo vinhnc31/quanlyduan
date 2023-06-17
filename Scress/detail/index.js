@@ -1,68 +1,80 @@
-import { StyleSheet, Text, View, Image, Button, TouchableHighlight, TouchableOpacity, ScrollView } from 'react-native';
-import { useRoute } from '@react-navigation/native';
-import React from 'react'
-import { useState } from 'react';
-import { API_URL } from '../../helper/Api';
+import { StyleSheet, Text, View, Image, TouchableOpacity, ScrollView } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import React from 'react';
+import { API_BOOK,API_URL } from "../../helper/Api";
+const chitiet = ({ route, navigation }) => {
+  const { item_sp } = route.params;
 
-const chitiet = ({route,navigation}) => {
-
-  const {item_sp} = route.params;
-
-  const click =()=>{
-      console.log(item_sp);
+  const toReadBook =()=>{
+    navigation.navigate('ReadBook', {Item: item_sp});
+      console.log(JSON.stringify(item_sp));
   }
 
 
+
+
+  const sangtusach = () => {
+    navigation.navigate('Favourite', { item_sp: item_sp });
+    alert('Thêm thành công');
+  }
   return (
     <View style={styles.container}>
-  
-      {/* <Image style={{ width: 230, height: 230, margin: 20, marginLeft: 70 }} source={{ uri: 'http:192.168.0.102:4444/' + item_sp.image }}/> */}
-      <Image style={{ width: 230, height: 230, margin: 20, marginLeft: 70 }} source={{ uri: API_URL+ '/' + item_sp.image }} />
-     
-      <View style={{ marginLeft: 30 }}>
-        <Text style={styles.texthihi}> {item_sp.nameBook}</Text>
-         <Text style={styles.texthihi}> Tác giả: <Text style={{fontWeight:"normal"}}>{item_sp.author} </Text> </Text>  
-       
-        <Text style={styles.texthihi}>Ngày xuất bản:  <Text style={{fontWeight:"normal"}}>{item_sp.date} </Text></Text>
+      <Image style={{ width: 230, height: 230, margin: 20, alignSelf: 'center' }} source={{ uri: API_URL+ '/' + item_sp.image }} />
+      <View style={styles.detailsContainer}>
+        <Text style={styles.title}>{item_sp.nameBook}</Text>
+        <Text style={styles.author}>Tác giả: {item_sp.author}</Text>
+        <Text style={styles.date}>Ngày xuất bản: {item_sp.date}</Text>
       </View>
-      <View style={{ flexDirection: 'row', marginTop: 20 }}>
-        <TouchableOpacity style={styles.buttonhihi} onPress={click}>
-          <Text style={{ fontWeight: '600' }}>Đọc Truyện</Text>
+      <View style={styles.buttonContainer}>
+        <TouchableOpacity style={styles.button} onPress={toReadBook}>
+          <Text style={styles.buttonText}>Đọc Truyện</Text>
         </TouchableOpacity>
-
-        <TouchableOpacity style={styles.buttonhihi1}>
-          <Text style={{ fontWeight: '600' }}>Thêm vào giỏ sách</Text>
+        <TouchableOpacity style={styles.button} onPress={sangtusach}>
+          <Text style={styles.buttonText}>Thêm vào giỏ sách</Text>
         </TouchableOpacity>
       </View>
-
-      <View>
-        <Text style={{ backgroundColor: '#62CDFF', fontWeight: 'bold', fontSize: 17, marginTop: 20, padding: 6 }}>Tóm tắt Nội dung</Text> 
-      
-        <ScrollView style={{height:165}}>
-          <Text style={{marginHorizontal:15,marginTop:5}}> {item_sp.content}</Text>
+      <View style={styles.summaryContainer}>
+        <Text style={styles.summaryTitle}>Tóm tắt Nội dung</Text>
+        <ScrollView style={styles.summaryScrollView}>
+          <Text style={styles.summaryText}>{item_sp.content}</Text>
         </ScrollView>
-       
       </View>
     </View>
-  )
-}
+  );
+};
 
-export default chitiet
+export default chitiet;
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
-    // alignItems: 'center',
-    // justifyContent: 'center',
-
   },
-  texthihi: {
+  image: {
+    width: 230,
+    height: 230,
+    margin: 20,
+    marginLeft: 70,
+  },
+  detailsContainer: {
+    marginLeft: 30,
+  },
+  title: {
     fontSize: 20,
     margin: 3,
-    fontWeight: '600'
+    fontWeight: '600',
   },
-  buttonhihi: {
+  author: {
+    fontWeight: 'normal',
+  },
+  date: {
+    fontWeight: 'normal',
+  },
+  buttonContainer: {
+    flexDirection: 'row',
+    marginTop: 20,
+  },
+  button: {
     width: 100,
     height: 28,
     backgroundColor: '#62CDFF',
@@ -71,18 +83,26 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     borderColor: 'black',
     borderWidth: 0.8,
-    marginLeft: 20
+    marginLeft: 20,
   },
-  buttonhihi1: {
-    width: 150,
-    height: 28,
+  buttonText: {
+    fontWeight: '600',
+  },
+  summaryContainer: {
+    marginTop: 20,
+  },
+  summaryTitle: {
     backgroundColor: '#62CDFF',
-    borderRadius: 10,
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderColor: 'black',
-    borderWidth: 0.8,
-    marginLeft: 60,
-
-  }
+    fontWeight: 'bold',
+    fontSize: 17,
+    marginTop: 20,
+    padding: 6,
+  },
+  summaryScrollView: {
+    height: 165,
+  },
+  summaryText: {
+    marginHorizontal: 15,
+    marginTop: 5,
+  },
 });

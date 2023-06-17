@@ -51,6 +51,9 @@ const TabNaviagation = (props) => {
           return <Ionicons name={iconName} size={size} color={color} />;
         };
       }}
+      
+     
+      
     >
       <Tab.Screen name="home" component={home} options={{headerShown: true}} />  
       <Tab.Screen name="Favorite" component={Favourite}  options={{headerShown: false}}/>

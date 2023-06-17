@@ -1,18 +1,19 @@
 import React, { useEffect, useState } from "react";
-import { ScrollView, FlatList, View, Text, TextInput, StyleSheet, Image, Button, TouchableOpacity } from "react-native";
+import { ScrollView, FlatList, View, Text, TextInput, StyleSheet, Image, Button, TouchableOpacity,TouchableWithoutFeedback } from "react-native";
 import Icon from 'react-native-vector-icons/FontAwesome';
 import filter from "lodash.filter";
 import { API_BOOK,API_URL } from "../../helper/Api";
 const Home = (props) => {
   const navigation = props.navigation;
   const [data, setData] = useState([]);
-  const [searchText, setSearchText] = useState("");
-  const [searchQuery, setsearchQuery] = useState('')
-  const [fulldata, setfulldata] = useState([])
+  const [searchQuery, setSearchQuery] = useState('');
+  const [filteredData, setFilteredData] = useState([]);
 
   const [datatheloai, setdatatheloai] = useState([
     { nametheloai:"Truyện Ma"}, { nametheloai:"Truyện Cổ Tích"}, { nametheloai:"Truyện Ngụ Ngôn "}, { nametheloai:"Truyện Ngụ Ngôn "},
    ])
+
+
   const getProduct = () => {
     fetch(API_BOOK)
       .then(item => item.json())
@@ -22,29 +23,28 @@ const Home = (props) => {
       })
       .catch(err => console.log(err))
   }
-  // const handleSearch = (query) => {
-  //   setsearchQuery(query)
-  //   const formattedQuery = query;
-  //   const filteredData = filter(fulldata, (sp) => {
-  //     return contains(sp, formattedQuery);
-  //     // 
-  //   });
-  //   setData(filteredData)
-  // }
+  const handleSearch = (text) => {
+    setSearchQuery(text);
+  
+    // Xóa kết quả tìm kiếm trước đó khỏi filteredData
+    setFilteredData([]);
+  
+    if (text !== '') {
+      const filtered = data.filter((item) =>
+        item.nameBook.toLowerCase().indexOf(text.toLowerCase()) !== -1
+      );
+      setFilteredData(filtered);
+    }
+  };
 
 
 
   useEffect(() => {
     getProduct();
-  }, []);
+    handleSearch(searchQuery);
+  }, [searchQuery]);
 
-  //   useEffect(() => {
-  //   const filteredResult = data.filter(
-  //     (item) =>
-  //       item.nameBook.toLowerCase().includes(searchText.toLowerCase()) // Lọc dữ liệu theo tên sách
-  //   );
-  //   setFilteredData(filteredResult);
-  // }, [searchText, data]);
+
 
   const renderItem = ({ item }) => {
 
@@ -55,6 +55,10 @@ const Home = (props) => {
         </Text>
       </View>
     );
+  };
+  const handleTextInputPress = () => {
+    // Chuyển màn hình tại đây
+    navigation.navigate('detail');
   };
 
 
@@ -74,19 +78,23 @@ const Home = (props) => {
   };
   return (
     <ScrollView>
-      <View style={{ flex: 1, marginHorizontal: 20, marginTop: 40 }}>
-        
-      <TextInput placeholder='Search'
-          clearButtonMode='always'// tạo nút bấm xóa 
-          // không tự động viết hoa đầu dòng 
-          autoCorrect={false}
-         
-          onChangeText={(text) => {setsearchQuery(text) }}
-          style={styles.input} />
-          <Icon name="search" size={20} color="gray" style={styles.searchIcon} />
+      
+      <View style={styles.container}>
+     
+        <View style={styles.searchContainer}>
+          <TextInput
+            placeholder="Tìm kiếm"
+            clearButtonMode="always"
+            autoCapitalize="none"
+            autoCorrect={false}
+            onChangeText={handleSearch}
+            style={styles.input}
+          />
+          {/* <Icon name="search" size={20} color="gray" style={styles.searchIcon} /> */}
+        </View>
+      
+    </View>
 
-
-      </View>
 
       <View style={styles.text}>
         <Text style={styles.text}>Thể Loại</Text>
@@ -101,11 +109,21 @@ const Home = (props) => {
       <View style={styles.text}>
         <Text style={styles.text}>Danh sách</Text>
         <FlatList
-          data={data.filter(sp => sp.nameBook.toLowerCase()
-            .includes(searchQuery.toLowerCase()))}
+          
+          data={filteredData}
           numColumns={2}
-          keyExtractor={(item) => item.id}
-          renderItem={renderItemProduct}
+          keyExtractor={(item) => item.id && item.id.toString()}
+          renderItem={({ item }) =>
+           <View style={styles.itemContainer2 }>
+            <Image source={{ uri: API_URL +'/' + item.image }} style={styles.itemImage2} />
+            <Text style={styles.itemName}>{item.nameBook} </Text>
+         
+       
+      </View>
+       
+        
+         
+          }
         />
       </View>
       <View style={styles.text}>

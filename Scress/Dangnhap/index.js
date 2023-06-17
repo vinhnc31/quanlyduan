@@ -163,7 +163,7 @@ const styles = StyleSheet.create({
   },
   btnRegister: {
     fontSize: 16,
-    marginTop: 15,
+    marginTop: 20,
     color: "#0093FD",
   },
   checkboxContainer: {

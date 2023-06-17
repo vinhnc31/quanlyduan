@@ -14,6 +14,10 @@ import doimk from "./Scress/doimatkhau";
 import { BackHandler, Alert } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 import chitiet from "./Scress/detail";
+import SearchBook from "./Scress/searchBook";
+import favourite from "./Scress/Favourite";
+
+
 const App = () => {
 
 
@@ -45,13 +49,29 @@ const App = () => {
           component={doimk}
           options={{ headerShown: false }}
         />
-         <Stack.Screen
+        <Stack.Screen
           name="detail"
           component={chitiet}
           options={{ headerShown: false }}
         />
-       
-       
+        <Stack.Screen
+          name="searchBook"
+          component={SearchBook}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+
+          name="Favourite"
+          component={favourite}
+          options={{ headerShown: false }}
+        />
+        {/* <Stack.Screen
+          name="ReadBook"
+          component={readBook}
+          options={{ headerShown: false }}
+        /> */}
+
+
       </Stack.Navigator>
     </NavigationContainer>
   );
