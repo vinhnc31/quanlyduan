@@ -8,8 +8,13 @@ const FavouriteScreen = ({ route }) => {
   const [hasData, setHasData] = useState(false);
 
   useEffect(() => {
-    saveFavouriteItems(); // Save the item automatically when component mounts
+    saveFavouriteItems(); 
+    // Save the item automatically when component mounts
   }, []);
+  useEffect(() => {
+    loadFavouriteItems(); 
+    // Save the item automatically when component mounts
+  }, [favouriteItems]);
 
   const saveFavouriteItems = async () => {
     try {

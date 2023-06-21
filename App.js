@@ -17,6 +17,7 @@ import chitiet from "./Scress/detail";
 import SearchBook from "./Scress/searchBook";
 import favourite from "./Scress/Favourite";
 import readBook from "./Scress/ReadBook";
+import Category from "./Scress/Theloai";
 
 
 const App = () => {
@@ -69,6 +70,11 @@ const App = () => {
         <Stack.Screen
           name="ReadBook"
           component={readBook}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="Theloai"
+          component={Category}
           options={{ headerShown: false }}
         />
 

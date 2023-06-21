@@ -49,11 +49,15 @@ const Home = (props) => {
   const renderItem = ({ item }) => {
 
     return (
+      <TouchableOpacity onPress={() => { navigation.navigate('Theloai') }}>
       <View style={styles.itemContainer}>
         <Text style={styles.itemName}> {item.nametheloai}
 
         </Text>
       </View>
+
+      </TouchableOpacity>
+
     );
   };
   const handleTextInputPress = () => {
@@ -79,20 +83,12 @@ const Home = (props) => {
   };
   return (
     <ScrollView>
-      
-      <View style={styles.container}>
      
-        <View style={styles.searchContainer}>
-          <TextInput
-            placeholder="Tìm kiếm"
-            clearButtonMode="always"
-            autoCapitalize="none"
-            autoCorrect={false}
-            onChangeText={handleSearch}
-            style={styles.input}
-          />
-          {/* <Icon name="search" size={20} color="gray" style={styles.searchIcon} /> */}
-        </View>
+      <View style={styles.container2}>
+      <TouchableOpacity onPress={()=>{navigation.navigate("searchBook")}}>
+      <Text>Tim kiem</Text>
+        </TouchableOpacity>
+    
       
     </View>
 
@@ -119,8 +115,7 @@ const Home = (props) => {
             <Text style={styles.itemName}>{item.nameBook} </Text>
        
       </View>
-       
-        
+
          
           }
         />
@@ -217,6 +212,14 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 10,
     left: 280,
+  },
+  container2: {
+    borderWidth: 1,
+    borderColor: 'black',
+    padding: 20,
+    width: 370,
+    alignSelf: 'center',
+    borderRadius: 10,
   },
 });
 
