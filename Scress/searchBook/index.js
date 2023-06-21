@@ -53,7 +53,6 @@ const SearchBook = (props) => {
 
 
       <View style={styles.text}>
-        <Text style={styles.text}>Danh sách</Text>
         <FlatList
           data={filteredData}
           numColumns={2}
@@ -107,6 +106,7 @@ const styles = StyleSheet.create({
   searchContainer: {
     padding: 10,
     backgroundColor: '#f2f2f2',
+    marginTop: 20
   },
   searchInput: {
     height: 40,
@@ -146,7 +146,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: 'gray',
     borderRadius: 8,
-    paddingLeft: 20, // Để tạo khoảng trống bên trái để chứa biểu tượng
+    paddingLeft: 20,
   },
   searchIcon: {
     position: 'absolute',

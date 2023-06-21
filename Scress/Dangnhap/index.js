@@ -53,7 +53,8 @@ const dangnhap = (props) => {
         headers: {
           "Content-Type": "application/json",
         },
-      }).then((response) => {
+      })
+        .then((response) => {
           if (!response.ok) {
             Alert.alert("Thông Báo", "Dm mày sai tài khoản và mật khẩu rồi !", [
               { text: "OK" },
@@ -65,7 +66,8 @@ const dangnhap = (props) => {
             storageAutheInfo(request);
             navigation.navigate("Home");
           }
-        }).catch((err) => console.log(err));
+        })
+        .catch((err) => console.log(err));
     }
   };
   const handlerCheckEmail = (text) => {
@@ -148,7 +150,6 @@ const styles = StyleSheet.create({
   button: {
     width: 150,
     height: 50,
-    borderWidth: 2,
     marginTop: 50,
     backgroundColor: "#fff",
     borderRadius: 10,

@@ -20,8 +20,8 @@ const dangky = (props) => {
       nameUser,
       email,
       password,
-    }
-   2
+    };
+    2;
 
     fetch(API_USER_ADD, {
       method: "POST",
@@ -40,7 +40,7 @@ const dangky = (props) => {
       .catch((err) => console.log(err));
   };
   const handlerCheckName = (text) => {
-    const name = text == '';
+    const name = text == "";
     setnameUser(text);
     !name ? setCheckValidateName(false) : setCheckValidateName(true);
   };
@@ -68,7 +68,7 @@ const dangky = (props) => {
         value={nameUser}
         style={styles.input}
       />
-         {checkValidateName ? (
+      {checkValidateName ? (
         <Text style={styles.checkText}>Tên không được để trống !</Text>
       ) : (
         <Text></Text>
@@ -94,16 +94,14 @@ const dangky = (props) => {
         secureTextEntry={true}
         style={styles.input}
       />
-     <TextInput
+      <TextInput
         placeholder="Comfirm Password"
         onChangeText={setRepassword}
         value={repassword}
         secureTextEntry={true}
         style={styles.input}
-        
       />
-      
-     
+
       <Pressable style={styles.button} onPress={() => onLogout()}>
         <Text style={styles.textButton}>ĐĂNG KÝ</Text>
       </Pressable>
@@ -119,7 +117,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#62CDFF",
   },
   input: {
-    width: '100%',
+    width: "100%",
     borderWidth: 1,
     borderColor: "#ccc",
     padding: 10,
@@ -132,13 +130,12 @@ const styles = StyleSheet.create({
     fontSize: 32,
     marginBottom: 87,
     marginTop: -80,
-    textAlign: 'center',
-    fontWeight: 'bold'
+    textAlign: "center",
+    fontWeight: "bold",
   },
   button: {
     width: 150,
     height: 50,
-    borderWidth: 2,
     marginTop: 60,
     backgroundColor: "#fff",
     borderRadius: 10,

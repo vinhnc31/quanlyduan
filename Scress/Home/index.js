@@ -1,137 +1,151 @@
 import React, { useEffect, useState } from "react";
-import { ScrollView, FlatList, View, Text, TextInput, StyleSheet, Image, Button, TouchableOpacity,TouchableWithoutFeedback } from "react-native";
-import Icon from 'react-native-vector-icons/FontAwesome';
-import filter from "lodash.filter";
-import { API_BOOK,API_URL } from "../../helper/Api";
+import {
+  ScrollView,
+  FlatList,
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  TouchableOpacity,
+  ActivityIndicator,
+} from "react-native";
+import { API_BOOK, API_URL } from "../../helper/Api";
 const Home = (props) => {
   const navigation = props.navigation;
   const [data, setData] = useState([]);
-  const [searchQuery, setSearchQuery] = useState('');
-  const [filteredData, setFilteredData] = useState([]);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   const [datatheloai, setdatatheloai] = useState([
-    { nametheloai:"Truyện Ma"}, { nametheloai:"Truyện Cổ Tích"}, { nametheloai:"Truyện Ngụ Ngôn "}, { nametheloai:"Truyện Ngụ Ngôn "},
-   ])
-
+    { nametheloai: "Truyện Ma" },
+    { nametheloai: "Truyện Cổ Tích" },
+    { nametheloai: "Truyện Ngụ Ngôn " },
+    { nametheloai: "Truyện Ngụ Ngôn " },
+  ]);
 
   const getProduct = () => {
     fetch(API_BOOK)
-      .then(item => item.json())
-      .then(data => {
-        console.log(data);
-        setData(data.sp)
+      .then((item) => item.json())
+      .then((data) => {
+        console.log(data.sp);
+        setData(data.sp);
+        setIsLoading(false);
       })
-      .catch(err => console.log(err))
-  }
-  const handleSearch = (text) => {
-    setSearchQuery(text);
-  
-    // Xóa kết quả tìm kiếm trước đó khỏi filteredData
-    setFilteredData([]);
-  
-    if (text !== '') {
-      const filtered = data.filter((item) =>
-        item.nameBook.toLowerCase().indexOf(text.toLowerCase()) !== -1
-      );
-      setFilteredData(filtered);
-    }
+      .catch((error) => {
+        setError(error);
+        console.log(error);
+        setIsLoading(false);
+      });
   };
-
-
-
   useEffect(() => {
+    setIsLoading(true);
     getProduct();
-    handleSearch(searchQuery);
-  }, [searchQuery]);
-
-
+  }, []);
+  if (isLoading) {
+    return (
+      <View
+        style={{ flex: 1, justifyContent: "center", alignContent: "center" }}
+      >
+        <ActivityIndicator size={"large"} color={"black"} />
+      </View>
+    );
+  }
+  if (error) {
+    <View style={{ flex: 1, justifyContent: "center", alignContent: "center" }}>
+      <Text>Lỗi kết nối dữ liệu...... Bạn vui lòng kiểm tra interner!</Text>
+    </View>;
+  }
 
   const renderItem = ({ item }) => {
-
     return (
-      <TouchableOpacity onPress={() => { navigation.navigate('Theloai') }}>
-      <View style={styles.itemContainer}>
-        <Text style={styles.itemName}> {item.nametheloai}
-
-        </Text>
-      </View>
-
+      <TouchableOpacity
+        onPress={() => {
+          navigation.navigate("Theloai");
+        }}
+      >
+        <View style={styles.itemContainer}>
+          <Text style={styles.itemName}> {item.nametheloai}</Text>
+        </View>
       </TouchableOpacity>
-
     );
   };
-  const handleTextInputPress = () => {
-    // Chuyển màn hình tại đây
-    navigation.navigate('detail');
-  };
-
-
-  console.log(filteredData)
   const renderItemProduct = ({ item }) => {
-
     return (
       <View style={styles.itemContainer2}>
-
-        <TouchableOpacity onPress={() => { navigation.navigate('detail', { item_sp: item }) }}>
-          <View style={{ borderWidth: 1, alignItems: "center", height: 170,width:130, paddingTop: 7 }}>
-            <Image source={{ uri: API_URL +'/' + item.image }} style={styles.itemImage2} />
-            <Text style={styles.itemName}>{item.nameBook} </Text>
+        <TouchableOpacity
+          onPress={() => {
+            navigation.navigate("detail", { item_sp: item });
+          }}
+        >
+          <View
+            style={{
+              borderWidth: 1,
+              alignItems: "center",
+              height: 170,
+              width: 130,
+              paddingTop: 7,
+            }}
+          >
+            <Image
+              source={{ uri: API_URL + "/" + item.image }}
+              style={styles.itemImage2}
+            />
+            <Text style={styles.itemName} numberOfLines={1}>
+              {item.nameBook}
+            </Text>
           </View>
         </TouchableOpacity>
       </View>
     );
   };
   return (
-    <ScrollView>
-     
+    <View style={styles.container}>
       <View style={styles.container2}>
-      <TouchableOpacity onPress={()=>{navigation.navigate("searchBook")}}>
-      <Text>Tim kiem</Text>
+        <Text
+          style={{
+            fontSize: 30,
+            marginLeft: 20,
+            fontWeight: "bold",
+            color: "#fff",
+            marginTop: 30
+          }}
+        >
+          Home
+        </Text>
+        <TouchableOpacity
+         style={{marginLeft: "60%", marginTop: 30 }} onPress={() => {
+            navigation.navigate("searchBook");
+          }}
+        >
+          <Image style= {{width:40,height:40}} source={require("../../Avata/search.png")} />
         </TouchableOpacity>
-    
-      
+      </View>
+      <ScrollView>
+        <View style={styles.text}>
+          <Text style={styles.text}>Thể Loại</Text>
+          <FlatList
+            horizontal
+            data={datatheloai}
+            keyExtractor={(item) => item.id}
+            renderItem={renderItem}
+            showsHorizontalScrollIndicator="false"
+          />
+        </View>
+
+        <View style={styles.text}>
+          <Text style={styles.text}>Danh Sách </Text>
+          <FlatList
+            data={data}
+            numColumns={2}
+            keyExtractor={(item) => item.id}
+            renderItem={renderItemProduct}
+          />
+        </View>
+      </ScrollView>
     </View>
-
-
-      <View style={styles.text}>
-        <Text style={styles.text}>Thể Loại</Text>
-        <FlatList
-          horizontal
-          data={datatheloai}
-          keyExtractor={(item) => item.id}
-          renderItem={renderItem}
-        />
-      </View>
-      
-      <View style={styles.text}>
-        <Text style={styles.text}>Danh sách</Text>
-        <FlatList
-          data={filteredData}
-          numColumns={2}
-          keyExtractor={(item) => item.id && item.id.toString()}
-          renderItem={({ item }) =>
-           <View style={styles.itemContainer2 }>
-            <Image source={{ uri: API_URL +'/' + item.image }} style={styles.itemImage2} />
-            <Text style={styles.itemName}>{item.nameBook} </Text>
-       
-      </View>
-
-         
-          }
-        />
-      </View>
-      <View style={styles.text}>
-        <Text style={styles.text}>Đề xuất </Text>
-        <FlatList
-          data={data}
-          numColumns={2}
-          keyExtractor={(item) => item.id}
-          renderItem={renderItemProduct}
-        />
-      </View>
-    </ScrollView>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -139,25 +153,25 @@ const styles = StyleSheet.create({
   },
   itemContainer: {
     borderWidth: 1,
-    borderColor: 'gray',
+    borderColor: "gray",
     paddingHorizontal: 10,
     borderRadius: 30,
     height: 30,
     margin: 6,
-    marginLeft:15,
+    marginLeft: 15,
     justifyContent: "center",
     alignItems: "center",
   },
   itemContainer2: {
-    flexDirection: 'column',
-    alignItems: 'center',
+    flexDirection: "column",
+    alignItems: "center",
     marginBottom: 10,
-    flexBasis: '50%',
+    flexBasis: "50%",
   },
   searchBox: {
     paddingHorizontal: 20,
     paddingVertical: 10,
-    borderColor: '#ccc',
+    borderColor: "#ccc",
     borderWidth: 1,
     borderRadius: 8,
   },
@@ -166,27 +180,30 @@ const styles = StyleSheet.create({
   },
   searchContainer: {
     padding: 10,
-    backgroundColor: '#f2f2f2',
+    backgroundColor: "#f2f2f2",
   },
   searchInput: {
     height: 40,
-    backgroundColor: '#ffffff',
+    backgroundColor: "#ffffff",
     paddingHorizontal: 10,
     borderRadius: 5,
   },
   text: {
     padding: 10,
+    fontSize: 25,
+    fontWeight: "bold",
   },
   sectionTitle: {
     fontSize: 18,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     marginBottom: 10,
   },
   listItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     marginBottom: 10,
-  }, itemImage2: {
+  },
+  itemImage2: {
     width: 100,
     height: 130,
     marginBottom: 10,
@@ -204,24 +221,23 @@ const styles = StyleSheet.create({
   input: {
     height: 40,
     borderWidth: 1,
-    borderColor: 'gray',
+    borderColor: "gray",
     borderRadius: 8,
-    paddingLeft: 20, // Để tạo khoảng trống bên trái để chứa biểu tượng
+    paddingLeft: 20,
   },
   searchIcon: {
-    position: 'absolute',
+    position: "absolute",
     top: 10,
     left: 280,
   },
   container2: {
-    borderWidth: 1,
-    borderColor: 'black',
-    padding: 20,
-    width: 370,
-    alignSelf: 'center',
-    borderRadius: 10,
-  },
+    width: "100%",
+    height: 80,
+    backgroundColor: "#62CDFF",
+    display:"flex",
+    flexDirection: "row",
+    alignItems:"center",
+    marginHorizontal: 0  },
 });
-
 
 export default Home;

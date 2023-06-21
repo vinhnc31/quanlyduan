@@ -14,7 +14,7 @@ const chitiet = ({ route, navigation }) => {
 
 
   const sangtusach = () => {
-    navigation.navigate('Favourite', { item_sp: item_sp });
+     navigation.navigate('Favourite', { item_sp: item_sp });
     alert('Thêm thành công');
   }
   return (
