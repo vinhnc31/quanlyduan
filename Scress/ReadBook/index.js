@@ -1,4 +1,12 @@
-import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
+import {
+  ActivityIndicator,
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import React, { useEffect, useState } from "react";
 import { useRoute } from "@react-navigation/native";
 import { API_PRODUCT } from "../../helper/Api";
@@ -8,23 +16,19 @@ const readBook = (props) => {
   const route = useRoute();
   const { Item } = route.params;
 
-  const [idchapter, setIdChapter] = useState(Item.chapter[0]);
-  const [data, setData] = useState("");
+  const [chapters, setChapters] = useState(Item.chapter);
+  const [currentChapterIndex, setCurrentChapterIndex] = useState(0);
+  const [chapterData, setChapterData] = useState(null);
+
   const [loading, setLoading] = useState(true);
-  const [index, setIndex] = useState(0);
-  let newIndex = 0;
 
-  const [disableButton, setDisableButton] = useState(false);
-
-  const getChapter = async () => {
-    setDisableButton(true); // disable các nút bấm
-    await fetch(`${API_PRODUCT}/${idchapter}/detailChapterApi`)
+  const getChapter = async (chapterId) => {
+    await fetch(`${API_PRODUCT}/${chapterId}/detailChapterApi`)
       .then((item) => item.json())
       .then((data) => {
         //set list chapter
-        setData(data);
+        setChapterData(data);
         setLoading(false);
-        setDisableButton(false);
       })
       .catch((err) => {
         console.log("loi: " + err);
@@ -33,53 +37,55 @@ const readBook = (props) => {
   };
 
   useEffect(() => {
-    getChapter();
-  }, []);
+    getChapter(chapters[currentChapterIndex]);
+  }, [currentChapterIndex]);
 
   const handlePrevChapter = () => {
-    if (!disableButton) {
-      newIndex = index - 1;
-      if (newIndex >= 0) {
-        setIndex(newIndex);
-        setIdChapter(Item.chapter[newIndex]);
-        getChapter();
-      } else {
-        console.log("Đã đến đầu truyện!");
-      }
+    // Navigate to previous chapter if there is one
+    if (currentChapterIndex > 0) {
+      setCurrentChapterIndex(currentChapterIndex - 1);
+    } else {
+      console.log("Đã đến đầu truyện!");
     }
   };
 
   const handleNextChapter = () => {
-    if (!disableButton) {
-      newIndex = newIndex + 1;
-      if (newIndex < Item.chapter.length) {
-        setIndex(newIndex);
-        setIdChapter(Item.chapter[newIndex]);
-        getChapter();
-      } else {
-        console.log("Truyện đã hết!");
-      }
+    // Navigate to next chapter if there is one
+    if (currentChapterIndex < chapters.length - 1) {
+      setCurrentChapterIndex(currentChapterIndex + 1);
+    } else {
+      console.log("Đã đến cuối truyện!");
     }
   };
+
+  const disableButton = false;
 
   return (
     <View style={styles.container}>
       {loading ? (
-        <Text>Loading...</Text>
+        <View
+          style={{ flex: 1, justifyContent: "center", alignContent: "center" }}
+        >
+          <ActivityIndicator size={"large"} color={"black"} />
+        </View>
       ) : (
         <View>
           <Text style={styles.txtnameBook}>{Item.nameBook}</Text>
-          <Text style={styles.txtchuong}>{data.chapter.nameChapter}</Text>
+          <Text style={styles.txtchuong}>
+            {chapterData?.chapter?.nameChapter}
+          </Text>
           <View style={styles.txtButton}>
-            <Pressable onPress={handlePrevChapter}>
+            <Pressable style={{}} onPress={handlePrevChapter}>
               <Text style={styles.txtButton1}>Trước</Text>
             </Pressable>
-            <Pressable onPress={handleNextChapter}>
+            <Pressable style={{}} onPress={handleNextChapter}>
               <Text style={styles.txtButton2}>Sau</Text>
             </Pressable>
           </View>
           <ScrollView>
-            <Text style={styles.txtContent}>{data.chapter.contentChapter}</Text>
+            <Text style={styles.txtContent}>
+              {chapterData?.chapter?.contentChapter}
+            </Text>
           </ScrollView>
         </View>
       )}
@@ -109,34 +115,37 @@ const styles = StyleSheet.create({
   },
   txtButton: {
     flexDirection: "row",
+    alignSelf: "center",
   },
   txtButton1: {
     backgroundColor: "#62CDFF",
     width: 169,
     height: 35,
     textAlign: "center",
-    textAlignVertical: "center",
+    paddingTop: 5,
     fontSize: 20,
+    marginRight: 10,
     fontWeight: "600",
     borderRadius: 10,
-    marginLeft: 10,
     marginTop: 44,
-    marginBottom: 44,
+    marginBottom: 10,
   },
   txtButton2: {
     backgroundColor: "#62CDFF",
     width: 169,
     height: 35,
     textAlign: "center",
-    textAlignVertical: "center",
     fontSize: 20,
+    paddingTop: 5,
     fontWeight: "600",
     borderRadius: 10,
-    marginLeft: 35,
     marginTop: 44,
-    marginBottom: 44,
+    marginBottom: 10,
+    marginLeft: 10,
   },
   txtContent: {
     padding: 10,
+    marginTop: 30,
+    marginBottom: 175,
   },
 });

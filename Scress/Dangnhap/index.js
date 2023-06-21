@@ -56,7 +56,7 @@ const dangnhap = (props) => {
         },
       }).then((response) => {
           if (!response.ok) {
-            Alert.alert("Thông Báo", "Tài khoản hoặc mật khẩu không chính sác !", [
+            Alert.alert("Thông Báo", "Tài khoản hoặc mật khẩu không chính xác !", [
               { text: "OK" },
             ]);
             return null;
