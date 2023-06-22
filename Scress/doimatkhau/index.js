@@ -145,7 +145,7 @@ const doimk = (props) => {
   return (
     <View style={styles.container}>
       <Text style={styles.textBack} onPress={() => {toBack()}}>Back</Text>
-      <Text style={styles.text}>DỔI MẬT KHẨU</Text>
+      <Text style={styles.text}>ĐỔI MẬT KHẨU</Text>
       <TextInput
         placeholder="Old password"
         onChangeText={setOldPassword}
@@ -181,7 +181,7 @@ const doimk = (props) => {
       ) : null}
 
       <Pressable style={styles.button} onPress={() => handleSubmit()}>
-        <Text style={styles.textButton}>SUMIT</Text>
+        <Text style={styles.textButton}>SUBMIT</Text>
       </Pressable>
     </View>
   );

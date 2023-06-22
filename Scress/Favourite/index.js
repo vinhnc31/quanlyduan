@@ -10,8 +10,10 @@ import {
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { API_URL } from "../../helper/Api";
 import { TouchableOpacity } from "react-native-gesture-handler";
-const FavouriteScreen = ({ route },props) => {
-  const navigation = props.navigation;
+const FavouriteScreen = ({ route, navigation }) => {
+  const chuyenMh = (screenName, params) => {
+    navigation.navigate(screenName, params);
+  };
   const { item_sp } = route.params || {};
   const [favouriteItems, setFavouriteItems] = useState([]);
   const [hasData, setHasData] = useState(false);
@@ -90,9 +92,7 @@ const FavouriteScreen = ({ route },props) => {
     if (item && item.image) {
       return (
         <TouchableOpacity
-          onPress={() => {
-            navigation.navigate("detail", { item_sp: item });
-          }}
+        onPress={() => chuyenMh("detail", { item_sp: item })}
         >
           <View style={styles.item}>
             <View style={styles.itemContent}>

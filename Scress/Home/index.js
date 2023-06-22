@@ -18,10 +18,10 @@ const Home = (props) => {
   const [error, setError] = useState(null);
 
   const [datatheloai, setdatatheloai] = useState([
-    { nametheloai: "Truyện Ma" },
-    { nametheloai: "Truyện Cổ Tích" },
-    { nametheloai: "Truyện Ngụ Ngôn " },
-    { nametheloai: "Truyện Ngụ Ngôn " },
+    { nametheloai: "Ngôn Tình" },
+    { nametheloai: "Kiếm Hiệp" },
+    { nametheloai: "Ngụ Ngôn " },
+    { nametheloai: "Ngụ Ngôn " },
   ]);
 
   const getProduct = () => {
@@ -61,7 +61,7 @@ const Home = (props) => {
     return (
       <TouchableOpacity
         onPress={() => {
-          navigation.navigate("Theloai");
+          navigation.navigate("Theloai", { item_theloai: item });
         }}
       >
         <View style={styles.itemContainer}>
@@ -108,17 +108,21 @@ const Home = (props) => {
             marginLeft: 20,
             fontWeight: "bold",
             color: "#fff",
-            marginTop: 30
+            marginTop: 30,
           }}
         >
           Home
         </Text>
         <TouchableOpacity
-         style={{marginLeft: "60%", marginTop: 30 }} onPress={() => {
+          style={{ marginLeft: "60%", marginTop: 30 }}
+          onPress={() => {
             navigation.navigate("searchBook");
           }}
         >
-          <Image style= {{width:40,height:40}} source={require("../../Avata/search.png")} />
+          <Image
+            style={{ width: 40, height: 40 }}
+            source={require("../../Avata/search.png")}
+          />
         </TouchableOpacity>
       </View>
       <ScrollView>
@@ -234,10 +238,11 @@ const styles = StyleSheet.create({
     width: "100%",
     height: 80,
     backgroundColor: "#62CDFF",
-    display:"flex",
+    display: "flex",
     flexDirection: "row",
-    alignItems:"center",
-    marginHorizontal: 0  },
+    alignItems: "center",
+    marginHorizontal: 0,
+  },
 });
 
 export default Home;
