@@ -67,8 +67,8 @@ const readBook = (props) => {
         </View>
       ) : (
         <View>
-          <Text style={styles.txtnameBook}>{Item.nameBook}</Text>
-          <Text style={styles.txtchuong}>
+          <Text style={styles.txtnameBook} numberOfLines={1}>{Item.nameBook}</Text>
+          <Text style={styles.txtchuong} numberOfLines={1}>
             {chapterData?.chapter?.nameChapter}
           </Text>
           <View style={styles.txtButton}>
@@ -98,6 +98,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   txtnameBook: {
+    marginHorizontal: 5,
     marginTop: 23,
     fontSize: 24,
     fontWeight: "600",
@@ -107,8 +108,9 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: "bold",
     textAlign: "left",
-    marginLeft: 10,
+    marginLeft: 25,
     marginTop: 14,
+    marginRight: 10,
   },
   txtButton: {
     flexDirection: "row",
@@ -124,7 +126,7 @@ const styles = StyleSheet.create({
     marginRight: 10,
     fontWeight: "600",
     borderRadius: 10,
-    marginTop: 44,
+    marginTop: 24,
     marginBottom: 10,
   },
   txtButton2: {
@@ -136,13 +138,14 @@ const styles = StyleSheet.create({
     paddingTop: 5,
     fontWeight: "600",
     borderRadius: 10,
-    marginTop: 44,
+    marginTop: 24,
     marginBottom: 10,
     marginLeft: 10,
   },
   txtContent: {
-    padding: 10,
+    paddingHorizontal: 15,
     marginTop: 30,
     marginBottom: 175,
+    fontSize: 20,
   },
 });

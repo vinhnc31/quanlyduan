@@ -133,7 +133,7 @@ const Home = (props) => {
             data={datatheloai}
             keyExtractor={(item) => item.id}
             renderItem={renderItem}
-            showsHorizontalScrollIndicator="false"
+
           />
         </View>
 

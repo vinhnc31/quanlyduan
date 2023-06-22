@@ -27,6 +27,7 @@ const Category = ({ route, navigation }) => {
       .then((data) => {
         console.log(data);
         setData(data.sp);
+        setLoading(false);
       })
       .catch((err) => console.log(err));
   };
@@ -70,7 +71,7 @@ const Category = ({ route, navigation }) => {
         </View>
       ) : (
         <View style={styles.text}>
-          <Text style={styles.text}>Đề xuất </Text>
+          <Text style={styles.textTL}>Danh sách thể loại:</Text>
           <FlatList
             data={loctheloai()}
             numColumns={2}
@@ -125,6 +126,13 @@ const styles = StyleSheet.create({
   },
   text: {
     padding: 10,
+  },
+  textTL: {
+    marginTop: 30,
+    marginLeft: 27,
+    margin: 20,
+    fontSize: 20,
+    fontWeight: "bold",
   },
   sectionTitle: {
     fontSize: 18,

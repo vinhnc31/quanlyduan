@@ -65,8 +65,8 @@ const SearchBook = (props) => {
               }}
             >
               <View style={styles.itemContainer2}>
-                <Image source={item.image} style={styles.itemImage2} />
-                <Text style={styles.itemName}>{item.nameBook} </Text>
+                <Image source={{ uri: API_URL + "/" + item.image }} style={styles.itemImage2} />
+                <Text style={styles.itemName} numberOfLines={1}>{item.nameBook} </Text>
               </View>
             </TouchableOpacity>
           )}
@@ -76,94 +76,39 @@ const SearchBook = (props) => {
   );
 };
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  itemContainer: {
-    borderWidth: 1,
-    borderColor: "gray",
-    paddingHorizontal: 10,
-    borderRadius: 30,
-    height: 30,
-    margin: 6,
-    marginLeft: 15,
-    justifyContent: "center",
-    alignItems: "center",
-  },
   itemContainer2: {
     flexDirection: "column",
     alignItems: "center",
     marginBottom: 10,
     flexBasis: "50%",
-  },
-  searchBox: {
-    paddingHorizontal: 20,
-    paddingVertical: 10,
-    borderColor: "#ccc",
+    width: 200,
     borderWidth: 1,
-    borderRadius: 8,
+    borderColor: '#fff',
   },
   itemName: {
     fontSize: 14,
   },
   searchContainer: {
-    padding: 10,
     backgroundColor: "#f2f2f2",
     marginTop: 20,
   },
-  searchInput: {
-    height: 40,
-    backgroundColor: "#ffffff",
-    paddingHorizontal: 10,
-    borderRadius: 5,
-  },
   text: {
     padding: 10,
-  },
-  sectionTitle: {
-    fontSize: 18,
-    fontWeight: "bold",
-    marginBottom: 10,
-  },
-  listItem: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginBottom: 10,
+    alignSelf: 'center'
   },
   itemImage2: {
-    width: 100,
-    height: 130,
+    width: 130,
+    height: 150,
     marginBottom: 10,
     borderRadius: 5,
-  },
-
-  itemImage: {
-    width: 50,
-    height: 0,
-    marginRight: 10,
-  },
-  itemText: {
-    fontSize: 16,
   },
   input: {
     height: 40,
+    margin: 20,
     borderWidth: 1,
     borderColor: "gray",
     borderRadius: 8,
     paddingLeft: 20,
-  },
-  searchIcon: {
-    position: "absolute",
-    top: 10,
-    left: 280,
-  },
-  container2: {
-    borderWidth: 1,
-    borderColor: "black",
-    padding: 20,
-    width: 370,
-    alignSelf: "center",
-    borderRadius: 10,
   },
 });
 export default SearchBook;
