@@ -56,7 +56,7 @@ const dangnhap = (props) => {
       })
         .then((response) => {
           if (!response.ok) {
-            Alert.alert("Thông Báo", "Dm mày sai tài khoản và mật khẩu rồi !", [
+            Alert.alert("Thông Báo", "Sai tài khoản và mật khẩu rồi !", [
               { text: "OK" },
             ]);
             return null;
